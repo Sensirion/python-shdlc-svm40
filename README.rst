@@ -1,10 +1,9 @@
-sensirion-shdlc-svm
-===================
+sensirion-shdlc-svm40
+=====================
 
-Install
--------
-.. sourcecode:: bash
+This package contains the SHDLC driver for the SVM40 Evaluation Kit which
+has a UART interface using the SHDLC protocol.
 
-    pip install sensirion-shdlc-svm
-
-Recommended usage is within a virtualenv.
+The driver provides all SHDLC commands as Python methods and handles all the
+low-level things like type conversions, checksum calculation, error handling
+etc.
