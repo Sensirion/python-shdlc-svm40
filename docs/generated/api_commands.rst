@@ -8,7 +8,7 @@
   #
   # Generator:    sensirion-shdlc-interface-generator 0.6.1
   # Product:      SVM40
-  # Version:      0.1.0
+  # Version:      0.2.0
   #
   ##############################################################################
   ##############################################################################
@@ -29,10 +29,10 @@ Read Measured Values
 
 .. automodule:: sensirion_shdlc_svm40.commands.read_measured_values
 
-Device Settings
-^^^^^^^^^^^^^^^
+Customer Engine Parameters
+^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. automodule:: sensirion_shdlc_svm40.commands.device_settings
+.. automodule:: sensirion_shdlc_svm40.commands.customer_engine_parameters
 
 Device Information
 ^^^^^^^^^^^^^^^^^^

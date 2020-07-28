@@ -14,7 +14,7 @@
 #
 # Generator:    sensirion-shdlc-interface-generator 0.6.1
 # Product:      SVM40
-# Version:      0.1.0
+# Version:      0.2.0
 #
 ##############################################################################
 ##############################################################################
@@ -29,8 +29,9 @@ from .stop_measurement import \
 from .read_measured_values import \
     Svm40CmdReadMeasuredValuesAsIntegers, \
     Svm40CmdReadMeasuredValuesAsIntegersWithRawParameters
-from .device_settings import \
+from .customer_engine_parameters import \
     Svm40CmdGetTOffset, \
+    Svm40CmdStoreNvData, \
     Svm40CmdSetTOffset
 from .device_information import \
     Svm40CmdGetProductType, \
