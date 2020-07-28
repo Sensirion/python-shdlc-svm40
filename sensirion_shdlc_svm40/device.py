@@ -10,7 +10,7 @@ from .commands import \
     Svm40CmdStopMeasurement, \
     Svm40CmdReadMeasuredValuesAsIntegers, \
     Svm40CmdReadMeasuredValuesAsIntegersWithRawParameters, \
-    Svm40CmdGetTOffset, Svm40CmdSetTOffset
+    Svm40CmdGetTOffset, Svm40CmdSetTOffset, Svm40CmdStoreNvData
 from .response_types import AirQuality, Humidity, Temperature
 
 import logging
@@ -64,13 +64,22 @@ class Svm40ShdlcDevice(ShdlcDevice):
         Sets the customer temperature offset which is used for the
         compensation.
 
-        .. note:: This parameter will be stored in the non-volatile memory of
-                  the device.
+        .. note:: Execute the command
+            :py:meth:`~sensirion_shdlc_svm40.device.store_nv_data` command
+            after writing the parameter to store it in the non-volatile memory
+            of the device otherwise the parameter will be reset upton a device
+            reset.
 
         :param float t_offset:
             Customer temperature offset in degrees celsius.
         """
         self.execute(Svm40CmdSetTOffset(t_offset))
+
+    def store_nv_data(self):
+        """
+        Stores all customer engine parameters to the non-volatile memory.
+        """
+        self.execute(Svm40CmdStoreNvData())
 
     def start_measurement(self):
         """
