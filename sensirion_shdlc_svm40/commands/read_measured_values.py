@@ -122,11 +122,11 @@ class Svm40CmdReadMeasuredValuesAsIntegersWithRawParameters(Svm40CmdReadMeasured
             - raw_voc_ticks (int) -
               Raw VOC output ticks as read from the SGP sensor.
             - raw_humidity (int) -
-              Uncompensated raw humidity in % RH as read from the SHTC3 with a
+              Uncompensated raw humidity in % RH as read from the SHT40 with a
               scaling factor of 100.
             - raw_temperature (int) -
               Uncompensated raw temperatur in degrees celsius as read from the
-              SHTC3 with a scaling of 200.
+              SHT40 with a scaling of 200.
         :rtype: tuple
         """
         voc_index = int(unpack(">h", data[0:2])[0])  # int16
