@@ -55,7 +55,7 @@ class Svm40CmdReadMeasuredValuesAsIntegers(Svm40CmdReadMeasuredValuesBase):
                   return zero initialized values.
         """
         super(Svm40CmdReadMeasuredValuesAsIntegers, self).__init__(
-            data=b"".join([bytes(bytearray([0x01]))]),
+            data=b"".join([bytes(bytearray([0x0A]))]),
             max_response_time=0.1,
             post_processing_time=0.0,
             min_response_length=6,
@@ -100,7 +100,7 @@ class Svm40CmdReadMeasuredValuesAsIntegersWithRawParameters(Svm40CmdReadMeasured
                   return zero initialized values.
         """
         super(Svm40CmdReadMeasuredValuesAsIntegersWithRawParameters, self).__init__(
-            data=b"".join([bytes(bytearray([0x09]))]),
+            data=b"".join([bytes(bytearray([0x0B]))]),
             max_response_time=0.1,
             post_processing_time=0.0,
             min_response_length=12,
