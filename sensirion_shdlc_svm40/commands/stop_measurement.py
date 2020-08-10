@@ -51,7 +51,7 @@ class Svm40CmdStopMeasurement(Svm40CmdStopMeasurementBase):
         """
         super(Svm40CmdStopMeasurement, self).__init__(
             data=[],
-            max_response_time=0.2,
+            max_response_time=0.05,
             post_processing_time=0.0,
             min_response_length=0,
             max_response_length=0

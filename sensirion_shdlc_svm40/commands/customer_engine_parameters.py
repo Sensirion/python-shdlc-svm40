@@ -49,7 +49,7 @@ class Svm40CmdGetTOffset(Svm40CmdCustomerEngineParametersBase):
         """
         super(Svm40CmdGetTOffset, self).__init__(
             data=b"".join([bytes(bytearray([0x01]))]),
-            max_response_time=0.1,
+            max_response_time=0.05,
             post_processing_time=0.0,
             min_response_length=4,
             max_response_length=4
@@ -75,7 +75,7 @@ class Svm40CmdStoreNvData(Svm40CmdCustomerEngineParametersBase):
         """
         super(Svm40CmdStoreNvData, self).__init__(
             data=b"".join([bytes(bytearray([0x80]))]),
-            max_response_time=0.5,
+            max_response_time=0.1,
             post_processing_time=0.0,
             min_response_length=0,
             max_response_length=0
@@ -100,7 +100,7 @@ class Svm40CmdSetTOffset(Svm40CmdCustomerEngineParametersBase):
         super(Svm40CmdSetTOffset, self).__init__(
             data=b"".join([bytes(bytearray([0x81])),
                            pack(">f", t_offset)]),
-            max_response_time=0.1,
+            max_response_time=0.05,
             post_processing_time=0.0,
             min_response_length=0,
             max_response_length=0

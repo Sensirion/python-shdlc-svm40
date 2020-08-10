@@ -55,7 +55,7 @@ class Svm40CmdEnterBootloader(Svm40CmdFirmwareUpdateBase):
         """
         super(Svm40CmdEnterBootloader, self).__init__(
             data=[],
-            max_response_time=0.5,
+            max_response_time=0.05,
             post_processing_time=1.0,
             min_response_length=0,
             max_response_length=0
@@ -76,7 +76,7 @@ class Svm40CmdStartUpdate(Svm40CmdFirmwareUpdateBase):
         """
         super(Svm40CmdStartUpdate, self).__init__(
             data=b"".join([bytes(bytearray([0x01]))]),
-            max_response_time=0.5,
+            max_response_time=0.05,
             post_processing_time=0.0,
             min_response_length=0,
             max_response_length=0
@@ -101,7 +101,7 @@ class Svm40CmdUpdateData(Svm40CmdFirmwareUpdateBase):
         super(Svm40CmdUpdateData, self).__init__(
             data=b"".join([bytes(bytearray([0x02])),
                            bytes(bytearray(data))]),
-            max_response_time=0.5,
+            max_response_time=0.1,
             post_processing_time=0.0,
             min_response_length=0,
             max_response_length=0
@@ -131,7 +131,7 @@ class Svm40CmdStopUpdate(Svm40CmdFirmwareUpdateBase):
         super(Svm40CmdStopUpdate, self).__init__(
             data=b"".join([bytes(bytearray([0x03])),
                            pack(">B", checksum)]),
-            max_response_time=1.0,
+            max_response_time=0.1,
             post_processing_time=0.0,
             min_response_length=0,
             max_response_length=0
