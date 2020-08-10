@@ -50,7 +50,7 @@ class Svm40CmdGetVersion(Svm40CmdGetVersionBase):
         """
         super(Svm40CmdGetVersion, self).__init__(
             data=[],
-            max_response_time=0.5,
+            max_response_time=0.05,
             post_processing_time=0.0,
             min_response_length=7,
             max_response_length=7

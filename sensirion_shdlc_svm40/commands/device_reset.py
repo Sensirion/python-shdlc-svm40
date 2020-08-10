@@ -53,8 +53,8 @@ class Svm40CmdDeviceReset(Svm40CmdDeviceResetBase):
         """
         super(Svm40CmdDeviceReset, self).__init__(
             data=[],
-            max_response_time=0.5,
-            post_processing_time=0.2,
+            max_response_time=0.05,
+            post_processing_time=0.1,
             min_response_length=0,
             max_response_length=0
         )

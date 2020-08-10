@@ -49,7 +49,7 @@ class Svm40CmdGetProductType(Svm40CmdDeviceInformationBase):
         """
         super(Svm40CmdGetProductType, self).__init__(
             data=b"".join([bytes(bytearray([0x00]))]),
-            max_response_time=0.5,
+            max_response_time=0.05,
             post_processing_time=0.0,
             min_response_length=0,
             max_response_length=255
@@ -75,7 +75,7 @@ class Svm40CmdGetProductName(Svm40CmdDeviceInformationBase):
         """
         super(Svm40CmdGetProductName, self).__init__(
             data=b"".join([bytes(bytearray([0x01]))]),
-            max_response_time=0.5,
+            max_response_time=0.05,
             post_processing_time=0.0,
             min_response_length=0,
             max_response_length=255
@@ -101,7 +101,7 @@ class Svm40CmdGetSerialNumber(Svm40CmdDeviceInformationBase):
         """
         super(Svm40CmdGetSerialNumber, self).__init__(
             data=b"".join([bytes(bytearray([0x03]))]),
-            max_response_time=0.5,
+            max_response_time=0.05,
             post_processing_time=0.0,
             min_response_length=0,
             max_response_length=255
