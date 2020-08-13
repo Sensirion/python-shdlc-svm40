@@ -39,6 +39,9 @@ pytest                          # Run all tests
 The tests with the marker `needs_device` have following requirements:
 
 - An SVM40 device must be connected to the computer.
+  - **WARNING: Some tests modify non-volatile configurations of the device,
+    restore factory defaults etc.! Do not run the tests on a device which you
+    don't want to get modified!**
 - You have to specify the serial port (and optionally other connection
   parameters) used to connect to the SVM40 device:
   - `--serial-port`: The serial port where the device is connected
