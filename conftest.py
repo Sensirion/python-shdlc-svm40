@@ -54,5 +54,6 @@ def connection(serial_port, serial_bitrate=115200):
 @pytest.fixture
 def device(connection, slave_address=0):
     device = Svm40ShdlcDevice(connection, slave_address)
+    device.device_reset()
 
     yield device

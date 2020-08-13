@@ -123,12 +123,7 @@ autodoc_default_flags = [
 def autodoc_skip_member(app, what, name, obj, skip, options):
     whitelist = ('__init__',)
     exclude = name.startswith('__') and (name not in whitelist)
-    # blacklist members from sensirion_shdlc_driver which are not implemented
-    blacklist = ('get_slave_address', 'set_slave_address', 'slave_address',
-                 'factory_reset', 'get_article_code', 'get_baudrate',
-                 'get_error_state', 'get_product_subtype', 'get_reply_delay',
-                 'last_error_flag', 'set_baudrate', 'set_reply_delay')
-    return skip or exclude or name in blacklist
+    return skip or exclude
 
 
 def setup(app):

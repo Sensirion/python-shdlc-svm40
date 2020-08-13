@@ -2,22 +2,30 @@
 # (c) Copyright 2020 Sensirion AG, Switzerland
 
 from __future__ import absolute_import, division, print_function
-from sensirion_shdlc_driver import ShdlcDevice, ShdlcFirmwareUpdate
+from sensirion_shdlc_driver import ShdlcDeviceBase, ShdlcFirmwareUpdate
 from .device_errors import SVM40_DEVICE_ERROR_LIST
 from .firmware_image import Svm40FirmwareImage
 from .commands import \
+    Svm40CmdGetProductType, \
+    Svm40CmdGetProductName, \
+    Svm40CmdGetSerialNumber, \
+    Svm40CmdGetVersion, \
+    Svm40CmdDeviceReset, \
+    Svm40CmdGetSystemUpTime, \
     Svm40CmdStartContinuousMeasurement, \
     Svm40CmdStopMeasurement, \
     Svm40CmdReadMeasuredValuesAsIntegers, \
     Svm40CmdReadMeasuredValuesAsIntegersWithRawParameters, \
     Svm40CmdGetTOffset, Svm40CmdSetTOffset, Svm40CmdStoreNvData
 from .response_types import AirQuality, Humidity, Temperature
+from sensirion_shdlc_driver.types import FirmwareVersion, HardwareVersion, \
+    ProtocolVersion, Version
 
 import logging
 log = logging.getLogger(__name__)
 
 
-class Svm40ShdlcDevice(ShdlcDevice):
+class Svm40ShdlcDevice(ShdlcDeviceBase):
     """
     SVM40 device.
 
@@ -48,6 +56,82 @@ class Svm40ShdlcDevice(ShdlcDevice):
         """
         super(Svm40ShdlcDevice, self).__init__(connection, slave_address)
         self._register_device_errors(SVM40_DEVICE_ERROR_LIST)
+
+    def get_product_type(self, as_int=False):
+        """
+        Get the product type. The product type (sometimes also called "device
+        type") can be used to detect what kind of SHDLC product is connected.
+
+        :param bool as_int: If ``True``, the product type is returned as an
+                            integer, otherwise as a string of hexadecimal
+                            digits (default).
+        :return: The product type as an integer or string of hexadecimal
+                 digits.
+        :rtype: string/int
+        """
+        product_type = self.execute(Svm40CmdGetProductType())
+        if as_int:
+            product_type = int(product_type, 16)
+        return product_type
+
+    def get_product_name(self):
+        """
+        Get the product name of the device.
+
+        :return: The product name as an ASCII string.
+        :rtype: string
+        """
+        return self.execute(Svm40CmdGetProductName())
+
+    def get_serial_number(self):
+        """
+        Get the serial number of the device.
+
+        :return: The serial number as an ASCII string.
+        :rtype: string
+        """
+        return self.execute(Svm40CmdGetSerialNumber())
+
+    def get_version(self):
+        """
+        Get the version of the device firmware, hardware and SHDLC protocol.
+
+        :return: The device version as a Version object.
+        :rtype: Version
+        """
+        firmware_major, firmware_minor, firmware_debug, \
+            hardware_major, hardware_minor, protocol_major, protocol_minor = \
+            self.execute(Svm40CmdGetVersion())
+        return Version(
+            firmware=FirmwareVersion(
+                major=firmware_major,
+                minor=firmware_minor,
+                debug=firmware_debug
+            ),
+            hardware=HardwareVersion(
+                major=hardware_major,
+                minor=hardware_minor
+            ),
+            protocol=ProtocolVersion(
+                major=protocol_major,
+                minor=protocol_minor
+            )
+        )
+
+    def get_system_up_time(self):
+        """
+        Get the system up time of the device.
+
+        :return: The time since the last power-on or device reset [s].
+        :rtype: int
+        """
+        return self.execute(Svm40CmdGetSystemUpTime())
+
+    def device_reset(self):
+        """
+        Execute a device reset (reboot firmware, similar to power cycle).
+        """
+        self.execute(Svm40CmdDeviceReset())
 
     def get_compensation_temperature_offset(self):
         """

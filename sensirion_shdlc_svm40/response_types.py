@@ -25,7 +25,7 @@ class AirQuality(object):
         super(AirQuality, self).__init__()
 
         #: The ticks (int) as received from the device.
-        self.ticks = ticks
+        self.ticks = int(ticks)
 
         #: The converted VOC index.
         self.voc_index = ticks / 10.
@@ -52,7 +52,7 @@ class Humidity(object):
         super(Humidity, self).__init__()
 
         #: The ticks (int) as received from the device.
-        self.ticks = ticks
+        self.ticks = int(ticks)
 
         #: The converted humidity in %RH.
         self.percent_rh = ticks / 100.
@@ -79,7 +79,7 @@ class Temperature(object):
         super(Temperature, self).__init__()
 
         #: The ticks (int) as received from the device.
-        self.ticks = ticks
+        self.ticks = int(ticks)
 
         #: The converted temperature in °C.
         self.degrees_celsius = ticks / 200.
