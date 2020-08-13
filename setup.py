@@ -39,7 +39,7 @@ setup(
         'pytest-runner~=4.2',
     ],
     install_requires=[
-        'sensirion-shdlc-driver[fwupdate]~=0.1.4',
+        'sensirion-shdlc-driver[fwupdate]~=0.1.5',
         'enum34;python_version<"3.4"',
     ],
     extras_require={
