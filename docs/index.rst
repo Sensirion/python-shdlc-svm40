@@ -16,4 +16,5 @@ etc.
    shdlc
    installation
    quickstart
+   firmware_update
    api
