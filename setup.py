@@ -49,10 +49,6 @@ setup(
             'pytest~=3.10.0',
             'pytest-cov~=2.6.0',
         ],
-        'docs': [
-            'sphinx~=2.2.1',
-            'sphinx-rtd-theme~=0.4.3',
-        ],
     },
     classifiers=[
         'Intended Audience :: Developers',
