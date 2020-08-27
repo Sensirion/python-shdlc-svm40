@@ -5,6 +5,7 @@ Following example code shows how the driver is intended to be used:
 
 .. sourcecode:: python
 
+    import time
     from sensirion_shdlc_driver import ShdlcSerialPort, ShdlcConnection
     from sensirion_shdlc_svm40 import Svm40ShdlcDevice
 
