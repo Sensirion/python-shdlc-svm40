@@ -53,8 +53,9 @@ The tests with the marker `needs_device` have following requirements:
 The documentation can be built with [Sphinx](http://www.sphinx-doc.org/):
 
 ```bash
-pip install -e .[docs]          # Install requirements
-cd docs && make html            # Build documentation
+python setup.py install                        # Install package
+pip install -r docs/requirements.txt           # Install requirements
+sphinx-versioning build docs docs/_build/html  # Build documentation
 ```
 
 ## License
