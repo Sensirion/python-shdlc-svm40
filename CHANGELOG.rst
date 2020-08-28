@@ -1,5 +1,12 @@
 CHANGELOG
 ---------
+
+0.2.1
+:::::
+- First public release
+- Use ``sphinx-versioning`` to build documentation
+- Fix missing ``import time`` in quick start documentation
+
 0.2.0
 :::::
 - Breaking change to support version 2 hardware
