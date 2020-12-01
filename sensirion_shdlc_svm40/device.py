@@ -16,10 +16,18 @@ from .commands import \
     Svm40CmdStopMeasurement, \
     Svm40CmdReadMeasuredValuesAsIntegers, \
     Svm40CmdReadMeasuredValuesAsIntegersWithRawParameters, \
-    Svm40CmdGetTOffset, Svm40CmdSetTOffset, Svm40CmdStoreNvData
+    Svm40CmdGetTemperatureOffsetForRhtMeasurements, \
+    Svm40CmdGetVocTuningParameters, \
+    Svm40CmdStoreNvData, \
+    Svm40CmdSetTemperatureOffsetForRhtMeasurements, \
+    Svm40CmdSetVocTuningParameters, \
+    Svm40CmdGetVocState, \
+    Svm40CmdSetVocState
 from .response_types import AirQuality, Humidity, Temperature
 from sensirion_shdlc_driver.types import FirmwareVersion, HardwareVersion, \
     ProtocolVersion, Version
+from struct import pack, unpack
+
 
 import logging
 log = logging.getLogger(__name__)
@@ -135,18 +143,25 @@ class Svm40ShdlcDevice(ShdlcDeviceBase):
 
     def get_compensation_temperature_offset(self):
         """
-        Gets the customer temperature offset which is used for the
-        compensation.
+        Gets the temperature offset for RHT measurements.
 
-        :return: Customer temperature offset in degrees celsius.
+        :return: Temperature offset in degrees celsius.
         :rtype: float
         """
-        return self.execute(Svm40CmdGetTOffset())
+        data = self.execute(Svm40CmdGetTemperatureOffsetForRhtMeasurements())
+        # Firmware versions prior to 2.0 will return a float value (4 bytes)
+        # and for firmware version >= 2.0 an int16 value (2 bytes) is returned.
+        t_offset = None
+        if len(data) == 2:
+            t_offset = float(unpack('>h', data)[0]) / 200.
+        elif len(data) == 4:
+            t_offset = float(unpack('>f', data)[0])
+        return t_offset
 
-    def set_compensation_temperature_offset(self, t_offset):
+    def set_compensation_temperature_offset(self, t_offset,
+                                            send_as_integer=False):
         """
-        Sets the customer temperature offset which is used for the
-        compensation.
+        Sets the temperature offset for RHT measurements.
 
         .. note:: Execute the command
             :py:meth:`~sensirion_shdlc_svm40.device.store_nv_data` command
@@ -154,16 +169,108 @@ class Svm40ShdlcDevice(ShdlcDeviceBase):
             of the device otherwise the parameter will be reset upton a device
             reset.
 
-        :param float t_offset:
-            Customer temperature offset in degrees celsius.
+        :param float t_offset: Temperature offset in degrees celsius.
+        :param bool send_as_integer:
+            Set to `True` to use the integer format. This option was added for
+            firmware version >= 2.0 which will accepted either a float value
+            (4 bytes) or an int16 value (2 bytes). Firmware versions prior to
+            2.0 will only accept the float format. Float temperature values are
+            in degrees celsius with no scaling. Integer temperature
+            values are in degrees celsius with a scaling of 200.
         """
-        self.execute(Svm40CmdSetTOffset(t_offset))
+        if send_as_integer:
+            data = pack('>h', int(round(t_offset * 200)))  # scaled int16
+        else:
+            data = pack('>f', t_offset)  # float
+        self.execute(Svm40CmdSetTemperatureOffsetForRhtMeasurements(data))
+
+    def get_voc_tuning_parameters(self):
+        """
+        Gets the currently set parameters for customizing the VOC algorithm.
+
+        :return:
+            - voc_index_offset (int) -
+              VOC index representing typical (average) conditions. The default
+              value is 100.
+            - learning_time_hours (int) -
+              Time constant of long-term estimator in hours. Past events will
+              be forgotten after about twice the learning time. The default
+              value is 12 hours.
+            - gating_max_duration_minutes (int) -
+              Maximum duration of gating in minutes (freeze of estimator during
+              high VOC index signal). Zero disables the gating. The default
+              value is 180 minutes.
+            - std_initial (int) -
+              Initial estimate for standard deviation. Lower value boosts
+              events during initial learning period, but may result in larger
+              device-to-device variations. The default value is 50.
+        :rtype: tuple
+        """
+        return self.execute(Svm40CmdGetVocTuningParameters())
+
+    def set_voc_tuning_parameters(self, voc_index_offset, learning_time_hours,
+                                  gating_max_duration_minutes, std_initial):
+        """
+        Sets parameters to customize the VOC algorithm. This command is only
+        available in idle mode.
+
+        .. note:: Execute the store command after writing the parameter to
+                  store it in the non-volatile memory of the device otherwise
+                  the parameter will be reset upton a device reset.
+
+        :param int voc_index_offset:
+            VOC index representing typical (average) conditions. The default
+            value is 100.
+        :param int learning_time_hours:
+            Time constant of long-term estimator in hours. Past events will be
+            forgotten after about twice the learning time. The default value is
+            12 hours.
+        :param int gating_max_duration_minutes:
+            Maximum duration of gating in minutes (freeze of estimator during
+            high VOC index signal). Set to zero to disable the gating. The
+            default value is 180 minutes.
+        :param int std_initial:
+            Initial estimate for standard deviation. Lower value boosts events
+            during initial learning period, but may result in larger
+            device-to-device variations. The default value is 50.
+        """
+        self.execute(Svm40CmdSetVocTuningParameters(
+            voc_index_offset, learning_time_hours, gating_max_duration_minutes,
+            std_initial))
 
     def store_nv_data(self):
         """
         Stores all customer engine parameters to the non-volatile memory.
         """
         self.execute(Svm40CmdStoreNvData())
+
+    def get_voc_state(self):
+        """
+        Gets the current VOC algorithm state. Retrieved values can be used to
+        set the VOC algorithm state to resume operation after a short
+        interruption, skipping initial learning phase. This command is only
+        available during measurement mode.
+
+        .. note:: This feature can only be used after at least 3 hours of
+                  continuous operation.
+
+        :return: Current VOC algorithm state.
+        :rtype: list(int)
+        """
+        return self.execute(Svm40CmdGetVocState())
+
+    def set_voc_state(self, state):
+        """
+        Set previously retrieved VOC algorithm state to resume operation after
+        a short interruption, skipping initial learning phase. This command is
+        only available in idle mode.
+
+        .. note:: This feature should not be used after interruptions of more
+                  than 10 minutes.
+
+        :param list(int) state: Current VOC algorithm state.
+        """
+        self.execute(Svm40CmdSetVocState(state))
 
     def start_measurement(self):
         """
