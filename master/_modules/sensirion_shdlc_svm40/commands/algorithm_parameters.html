@@ -1,0 +1,441 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>sensirion_shdlc_svm40.commands.algorithm_parameters &mdash; sensirion-shdlc-svm40 0.2.2 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../../../_static/favicon.ico"/>
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/banner.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> sensirion-shdlc-svm40
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.2.2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../shdlc.html">SHDLC Protocol</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../quickstart.html">Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../firmware_update.html">Firmware Update</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api.html">API Reference</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">sensirion-shdlc-svm40</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>sensirion_shdlc_svm40.commands.algorithm_parameters</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for sensirion_shdlc_svm40.commands.algorithm_parameters</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="c1"># (c) Copyright 2020 Sensirion AG, Switzerland</span>
+
+<span class="c1">##############################################################################</span>
+<span class="c1">##############################################################################</span>
+<span class="c1">#                 _____         _    _ _______ _____ ____  _   _</span>
+<span class="c1">#                / ____|   /\  | |  | |__   __|_   _/ __ \| \ | |</span>
+<span class="c1">#               | |       /  \ | |  | |  | |    | || |  | |  \| |</span>
+<span class="c1">#               | |      / /\ \| |  | |  | |    | || |  | | . ` |</span>
+<span class="c1">#               | |____ / ____ \ |__| |  | |   _| || |__| | |\  |</span>
+<span class="c1">#                \_____/_/    \_\____/   |_|  |_____\____/|_| \_|</span>
+<span class="c1">#</span>
+<span class="c1">#     THIS FILE IS AUTOMATICALLY GENERATED AND MUST NOT BE EDITED MANUALLY!</span>
+<span class="c1">#</span>
+<span class="c1"># Generator:    sensirion-shdlc-interface-generator 0.8.2</span>
+<span class="c1"># Product:      SVM40</span>
+<span class="c1"># Version:      0.3.0</span>
+<span class="c1">#</span>
+<span class="c1">##############################################################################</span>
+<span class="c1">##############################################################################</span>
+
+<span class="c1"># flake8: noqa</span>
+
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">absolute_import</span><span class="p">,</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span>
+<span class="kn">from</span> <span class="nn">sensirion_shdlc_driver.command</span> <span class="kn">import</span> <span class="n">ShdlcCommand</span>
+<span class="kn">from</span> <span class="nn">struct</span> <span class="kn">import</span> <span class="n">pack</span><span class="p">,</span> <span class="n">unpack</span>
+
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="Svm40CmdAlgorithmParametersBase"><a class="viewcode-back" href="../../../api.html#sensirion_shdlc_svm40.commands.algorithm_parameters.Svm40CmdAlgorithmParametersBase">[docs]</a><span class="k">class</span> <span class="nc">Svm40CmdAlgorithmParametersBase</span><span class="p">(</span><span class="n">ShdlcCommand</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    SHDLC command 0x60: &quot;Algorithm Parameters&quot;.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="Svm40CmdAlgorithmParametersBase.__init__"><a class="viewcode-back" href="../../../api.html#sensirion_shdlc_svm40.commands.algorithm_parameters.Svm40CmdAlgorithmParametersBase.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Constructor.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Svm40CmdAlgorithmParametersBase</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="mh">0x60</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="Svm40CmdGetTemperatureOffsetForRhtMeasurements"><a class="viewcode-back" href="../../../api.html#sensirion_shdlc_svm40.commands.algorithm_parameters.Svm40CmdGetTemperatureOffsetForRhtMeasurements">[docs]</a><span class="k">class</span> <span class="nc">Svm40CmdGetTemperatureOffsetForRhtMeasurements</span><span class="p">(</span><span class="n">Svm40CmdAlgorithmParametersBase</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Get Temperature Offset For Rht Measurements Command</span>
+
+<span class="sd">    Gets the T-Offset for the temperature compensation of the RHT algorithm.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="Svm40CmdGetTemperatureOffsetForRhtMeasurements.__init__"><a class="viewcode-back" href="../../../api.html#sensirion_shdlc_svm40.commands.algorithm_parameters.Svm40CmdGetTemperatureOffsetForRhtMeasurements.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Constructor.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Svm40CmdGetTemperatureOffsetForRhtMeasurements</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="n">data</span><span class="o">=</span><span class="sa">b</span><span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="nb">bytes</span><span class="p">(</span><span class="nb">bytearray</span><span class="p">([</span><span class="mh">0x01</span><span class="p">]))]),</span>
+            <span class="n">max_response_time</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span>
+            <span class="n">post_processing_time</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+            <span class="n">min_response_length</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+            <span class="n">max_response_length</span><span class="o">=</span><span class="mi">255</span>
+        <span class="p">)</span></div>
+
+<div class="viewcode-block" id="Svm40CmdGetTemperatureOffsetForRhtMeasurements.interpret_response"><a class="viewcode-back" href="../../../api.html#sensirion_shdlc_svm40.commands.algorithm_parameters.Svm40CmdGetTemperatureOffsetForRhtMeasurements.interpret_response">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">interpret_response</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :return: Temperature offset whith is used for the RHT measurements.</span>
+<span class="sd">                 Firmware versions prior to 2.0 will return a float value (4</span>
+<span class="sd">                 bytes). For firmware version &gt;= 2.0 an int16 value (2 bytes)</span>
+<span class="sd">                 is returned. Float temperature values are in degrees celsius</span>
+<span class="sd">                 with no scaling. Integer temperature values are in degrees</span>
+<span class="sd">                 celsius with a scaling of 200.</span>
+<span class="sd">        :rtype: bytes</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">t_offset</span> <span class="o">=</span> <span class="nb">bytes</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">:])</span>  <span class="c1"># bytearray</span>
+        <span class="k">return</span> <span class="n">t_offset</span></div></div>
+
+
+<div class="viewcode-block" id="Svm40CmdGetVocTuningParameters"><a class="viewcode-back" href="../../../api.html#sensirion_shdlc_svm40.commands.algorithm_parameters.Svm40CmdGetVocTuningParameters">[docs]</a><span class="k">class</span> <span class="nc">Svm40CmdGetVocTuningParameters</span><span class="p">(</span><span class="n">Svm40CmdAlgorithmParametersBase</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Get Voc Tuning Parameters Command</span>
+
+<span class="sd">    Gets the currently set parameters for customizing the VOC algorithm</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="Svm40CmdGetVocTuningParameters.__init__"><a class="viewcode-back" href="../../../api.html#sensirion_shdlc_svm40.commands.algorithm_parameters.Svm40CmdGetVocTuningParameters.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Constructor.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Svm40CmdGetVocTuningParameters</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="n">data</span><span class="o">=</span><span class="sa">b</span><span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="nb">bytes</span><span class="p">(</span><span class="nb">bytearray</span><span class="p">([</span><span class="mh">0x08</span><span class="p">]))]),</span>
+            <span class="n">max_response_time</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span>
+            <span class="n">post_processing_time</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+            <span class="n">min_response_length</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span>
+            <span class="n">max_response_length</span><span class="o">=</span><span class="mi">8</span>
+        <span class="p">)</span></div>
+
+<div class="viewcode-block" id="Svm40CmdGetVocTuningParameters.interpret_response"><a class="viewcode-back" href="../../../api.html#sensirion_shdlc_svm40.commands.algorithm_parameters.Svm40CmdGetVocTuningParameters.interpret_response">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">interpret_response</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :return:</span>
+<span class="sd">            - voc_index_offset (int) -</span>
+<span class="sd">              VOC index representing typical (average) conditions. The default</span>
+<span class="sd">              value is 100.</span>
+<span class="sd">            - learning_time_hours (int) -</span>
+<span class="sd">              Time constant of long-term estimator in hours. Past events will</span>
+<span class="sd">              be forgotten after about twice the learning time. The default</span>
+<span class="sd">              value is 12 hours.</span>
+<span class="sd">            - gating_max_duration_minutes (int) -</span>
+<span class="sd">              Maximum duration of gating in minutes (freeze of estimator during</span>
+<span class="sd">              high VOC index signal). Zero disables the gating. The default</span>
+<span class="sd">              value is 180 minutes.</span>
+<span class="sd">            - std_initial (int) -</span>
+<span class="sd">              Initial estimate for standard deviation. Lower value boosts</span>
+<span class="sd">              events during initial learning period, but may result in larger</span>
+<span class="sd">              device-to-device variations. The default value is 50.</span>
+<span class="sd">        :rtype: tuple</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">voc_index_offset</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">unpack</span><span class="p">(</span><span class="s2">&quot;&gt;h&quot;</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">])[</span><span class="mi">0</span><span class="p">])</span>  <span class="c1"># int16</span>
+        <span class="n">learning_time_hours</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">unpack</span><span class="p">(</span><span class="s2">&quot;&gt;h&quot;</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="mi">2</span><span class="p">:</span><span class="mi">4</span><span class="p">])[</span><span class="mi">0</span><span class="p">])</span>  <span class="c1"># int16</span>
+        <span class="n">gating_max_duration_minutes</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">unpack</span><span class="p">(</span><span class="s2">&quot;&gt;h&quot;</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="mi">4</span><span class="p">:</span><span class="mi">6</span><span class="p">])[</span><span class="mi">0</span><span class="p">])</span>  <span class="c1"># int16</span>
+        <span class="n">std_initial</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">unpack</span><span class="p">(</span><span class="s2">&quot;&gt;h&quot;</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="mi">6</span><span class="p">:</span><span class="mi">8</span><span class="p">])[</span><span class="mi">0</span><span class="p">])</span>  <span class="c1"># int16</span>
+        <span class="k">return</span> <span class="n">voc_index_offset</span><span class="p">,</span>\
+            <span class="n">learning_time_hours</span><span class="p">,</span>\
+            <span class="n">gating_max_duration_minutes</span><span class="p">,</span>\
+            <span class="n">std_initial</span></div></div>
+
+
+<div class="viewcode-block" id="Svm40CmdStoreNvData"><a class="viewcode-back" href="../../../api.html#sensirion_shdlc_svm40.commands.algorithm_parameters.Svm40CmdStoreNvData">[docs]</a><span class="k">class</span> <span class="nc">Svm40CmdStoreNvData</span><span class="p">(</span><span class="n">Svm40CmdAlgorithmParametersBase</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Store Nv Data Command</span>
+
+<span class="sd">    Stores all algorithm parameters to the non-volatile memory.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="Svm40CmdStoreNvData.__init__"><a class="viewcode-back" href="../../../api.html#sensirion_shdlc_svm40.commands.algorithm_parameters.Svm40CmdStoreNvData.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Constructor.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Svm40CmdStoreNvData</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="n">data</span><span class="o">=</span><span class="sa">b</span><span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="nb">bytes</span><span class="p">(</span><span class="nb">bytearray</span><span class="p">([</span><span class="mh">0x80</span><span class="p">]))]),</span>
+            <span class="n">max_response_time</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+            <span class="n">post_processing_time</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+            <span class="n">min_response_length</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+            <span class="n">max_response_length</span><span class="o">=</span><span class="mi">0</span>
+        <span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="Svm40CmdSetTemperatureOffsetForRhtMeasurements"><a class="viewcode-back" href="../../../api.html#sensirion_shdlc_svm40.commands.algorithm_parameters.Svm40CmdSetTemperatureOffsetForRhtMeasurements">[docs]</a><span class="k">class</span> <span class="nc">Svm40CmdSetTemperatureOffsetForRhtMeasurements</span><span class="p">(</span><span class="n">Svm40CmdAlgorithmParametersBase</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Set Temperature Offset For Rht Measurements Command</span>
+
+<span class="sd">    Sets the T-Offset for the temperature compensation of the RHT algorithm.</span>
+
+<span class="sd">    .. note:: Execute the store command after writing the parameter to store it</span>
+<span class="sd">              in the non-volatile memory of the device otherwise the parameter</span>
+<span class="sd">              will be reset upton a device reset.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="Svm40CmdSetTemperatureOffsetForRhtMeasurements.__init__"><a class="viewcode-back" href="../../../api.html#sensirion_shdlc_svm40.commands.algorithm_parameters.Svm40CmdSetTemperatureOffsetForRhtMeasurements.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t_offset</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Constructor.</span>
+
+<span class="sd">        :param bytes t_offset:</span>
+<span class="sd">            Temperature offset in degrees celsius. Accepted data formats are</span>
+<span class="sd">            either a float value (4 bytes) or an int16 value (2 bytes). Float</span>
+<span class="sd">            temperature values are in degrees celsius with no scaling. Integer</span>
+<span class="sd">            temperature values are in degrees celsius with a scaling of 200.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Svm40CmdSetTemperatureOffsetForRhtMeasurements</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="n">data</span><span class="o">=</span><span class="sa">b</span><span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="nb">bytes</span><span class="p">(</span><span class="nb">bytearray</span><span class="p">([</span><span class="mh">0x81</span><span class="p">])),</span>
+                           <span class="nb">bytes</span><span class="p">(</span><span class="nb">bytearray</span><span class="p">(</span><span class="n">t_offset</span><span class="p">))]),</span>
+            <span class="n">max_response_time</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span>
+            <span class="n">post_processing_time</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+            <span class="n">min_response_length</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+            <span class="n">max_response_length</span><span class="o">=</span><span class="mi">0</span>
+        <span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="Svm40CmdSetVocTuningParameters"><a class="viewcode-back" href="../../../api.html#sensirion_shdlc_svm40.commands.algorithm_parameters.Svm40CmdSetVocTuningParameters">[docs]</a><span class="k">class</span> <span class="nc">Svm40CmdSetVocTuningParameters</span><span class="p">(</span><span class="n">Svm40CmdAlgorithmParametersBase</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Set Voc Tuning Parameters Command</span>
+
+<span class="sd">    Sets parameters to customize the VOC algorithm. This command is only</span>
+<span class="sd">    available in idle mode.</span>
+
+<span class="sd">    .. note:: Execute the store command after writing the parameter to store it</span>
+<span class="sd">              in the non-volatile memory of the device otherwise the parameter</span>
+<span class="sd">              will be reset upton a device reset.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="Svm40CmdSetVocTuningParameters.__init__"><a class="viewcode-back" href="../../../api.html#sensirion_shdlc_svm40.commands.algorithm_parameters.Svm40CmdSetVocTuningParameters.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">voc_index_offset</span><span class="p">,</span> <span class="n">learning_time_hours</span><span class="p">,</span> <span class="n">gating_max_duration_minutes</span><span class="p">,</span> <span class="n">std_initial</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Constructor.</span>
+
+<span class="sd">        :param int voc_index_offset:</span>
+<span class="sd">            VOC index representing typical (average) conditions. The default</span>
+<span class="sd">            value is 100.</span>
+<span class="sd">        :param int learning_time_hours:</span>
+<span class="sd">            Time constant of long-term estimator in hours. Past events will be</span>
+<span class="sd">            forgotten after about twice the learning time. The default value is</span>
+<span class="sd">            12 hours.</span>
+<span class="sd">        :param int gating_max_duration_minutes:</span>
+<span class="sd">            Maximum duration of gating in minutes (freeze of estimator during</span>
+<span class="sd">            high VOC index signal). Set to zero to disable the gating. The</span>
+<span class="sd">            default value is 180 minutes.</span>
+<span class="sd">        :param int std_initial:</span>
+<span class="sd">            Initial estimate for standard deviation. Lower value boosts events</span>
+<span class="sd">            during initial learning period, but may result in larger</span>
+<span class="sd">            device-to-device variations. The default value is 50.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Svm40CmdSetVocTuningParameters</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="n">data</span><span class="o">=</span><span class="sa">b</span><span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="nb">bytes</span><span class="p">(</span><span class="nb">bytearray</span><span class="p">([</span><span class="mh">0x88</span><span class="p">])),</span>
+                           <span class="n">pack</span><span class="p">(</span><span class="s2">&quot;&gt;h&quot;</span><span class="p">,</span> <span class="n">voc_index_offset</span><span class="p">),</span>
+                           <span class="n">pack</span><span class="p">(</span><span class="s2">&quot;&gt;h&quot;</span><span class="p">,</span> <span class="n">learning_time_hours</span><span class="p">),</span>
+                           <span class="n">pack</span><span class="p">(</span><span class="s2">&quot;&gt;h&quot;</span><span class="p">,</span> <span class="n">gating_max_duration_minutes</span><span class="p">),</span>
+                           <span class="n">pack</span><span class="p">(</span><span class="s2">&quot;&gt;h&quot;</span><span class="p">,</span> <span class="n">std_initial</span><span class="p">)]),</span>
+            <span class="n">max_response_time</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span>
+            <span class="n">post_processing_time</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+            <span class="n">min_response_length</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+            <span class="n">max_response_length</span><span class="o">=</span><span class="mi">0</span>
+        <span class="p">)</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020 Sensirion AG, Switzerland
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+<div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+        <span class="fa fa-book"> Other Versions</span>
+        v: master
+        <span class="fa fa-caret-down"></span>
+    </span>
+    <div class="rst-other-versions">
+        <dl>
+            <dt>Tags</dt>
+            <dd><a href="../../../../0.1.0/index.html">0.1.0</a></dd>
+            <dd><a href="../../../../0.2.0/index.html">0.2.0</a></dd>
+            <dd><a href="../../../../0.2.1/index.html">0.2.1</a></dd>
+        </dl>
+        <dl>
+            <dt>Branches</dt>
+            <dd><a href="algorithm_parameters.html">master</a></dd>
+        </dl>
+    </div>
+</div>
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

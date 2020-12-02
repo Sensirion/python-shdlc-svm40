@@ -111,7 +111,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#module-sensirion_shdlc_svm40.commands.start_measurement">Start Measurement</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#module-sensirion_shdlc_svm40.commands.stop_measurement">Stop Measurement</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#module-sensirion_shdlc_svm40.commands.read_measured_values">Read Measured Values</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#module-sensirion_shdlc_svm40.commands.customer_engine_parameters">Customer Engine Parameters</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#customer-engine-parameters">Customer Engine Parameters</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#module-sensirion_shdlc_svm40.commands.device_information">Device Information</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#module-sensirion_shdlc_svm40.commands.get_version">Get Version</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#module-sensirion_shdlc_svm40.commands.device_reset">Device Reset</a></li>
@@ -321,13 +321,12 @@ digits.</td>
 <dl class="method">
 <dt id="sensirion_shdlc_svm40.device.Svm40ShdlcDevice.get_compensation_temperature_offset">
 <code class="descname">get_compensation_temperature_offset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/sensirion_shdlc_svm40/device.html#Svm40ShdlcDevice.get_compensation_temperature_offset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sensirion_shdlc_svm40.device.Svm40ShdlcDevice.get_compensation_temperature_offset" title="Permalink to this definition">¶</a></dt>
-<dd><p>Gets the customer temperature offset which is used for the
-compensation.</p>
+<dd><p>Gets the temperature offset for RHT measurements.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Customer temperature offset in degrees celsius.</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Temperature offset in degrees celsius.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">float</td>
 </tr>
@@ -337,9 +336,8 @@ compensation.</p>
 
 <dl class="method">
 <dt id="sensirion_shdlc_svm40.device.Svm40ShdlcDevice.set_compensation_temperature_offset">
-<code class="descname">set_compensation_temperature_offset</code><span class="sig-paren">(</span><em>t_offset</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sensirion_shdlc_svm40/device.html#Svm40ShdlcDevice.set_compensation_temperature_offset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sensirion_shdlc_svm40.device.Svm40ShdlcDevice.set_compensation_temperature_offset" title="Permalink to this definition">¶</a></dt>
-<dd><p>Sets the customer temperature offset which is used for the
-compensation.</p>
+<code class="descname">set_compensation_temperature_offset</code><span class="sig-paren">(</span><em>t_offset</em>, <em>send_as_integer=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sensirion_shdlc_svm40/device.html#Svm40ShdlcDevice.set_compensation_temperature_offset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sensirion_shdlc_svm40.device.Svm40ShdlcDevice.set_compensation_temperature_offset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the temperature offset for RHT measurements.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">Execute the command
@@ -352,7 +350,83 @@ reset.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>t_offset</strong> (<em>float</em>) – Customer temperature offset in degrees celsius.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>t_offset</strong> (<em>float</em>) – Temperature offset in degrees celsius.</li>
+<li><strong>send_as_integer</strong> (<em>bool</em>) – Set to <cite>True</cite> to use the integer format. This option was added for
+firmware version &gt;= 2.0 which will accepted either a float value
+(4 bytes) or an int16 value (2 bytes). Firmware versions prior to
+2.0 will only accept the float format. Float temperature values are
+in degrees celsius with no scaling. Integer temperature
+values are in degrees celsius with a scaling of 200.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="sensirion_shdlc_svm40.device.Svm40ShdlcDevice.get_voc_tuning_parameters">
+<code class="descname">get_voc_tuning_parameters</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/sensirion_shdlc_svm40/device.html#Svm40ShdlcDevice.get_voc_tuning_parameters"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sensirion_shdlc_svm40.device.Svm40ShdlcDevice.get_voc_tuning_parameters" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the currently set parameters for customizing the VOC algorithm.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><ul class="simple">
+<li>voc_index_offset (int) -
+VOC index representing typical (average) conditions. The default
+value is 100.</li>
+<li>learning_time_hours (int) -
+Time constant of long-term estimator in hours. Past events will
+be forgotten after about twice the learning time. The default
+value is 12 hours.</li>
+<li>gating_max_duration_minutes (int) -
+Maximum duration of gating in minutes (freeze of estimator during
+high VOC index signal). Zero disables the gating. The default
+value is 180 minutes.</li>
+<li>std_initial (int) -
+Initial estimate for standard deviation. Lower value boosts
+events during initial learning period, but may result in larger
+device-to-device variations. The default value is 50.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">tuple</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="sensirion_shdlc_svm40.device.Svm40ShdlcDevice.set_voc_tuning_parameters">
+<code class="descname">set_voc_tuning_parameters</code><span class="sig-paren">(</span><em>voc_index_offset</em>, <em>learning_time_hours</em>, <em>gating_max_duration_minutes</em>, <em>std_initial</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sensirion_shdlc_svm40/device.html#Svm40ShdlcDevice.set_voc_tuning_parameters"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sensirion_shdlc_svm40.device.Svm40ShdlcDevice.set_voc_tuning_parameters" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets parameters to customize the VOC algorithm. This command is only
+available in idle mode.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Execute the store command after writing the parameter to
+store it in the non-volatile memory of the device otherwise
+the parameter will be reset upton a device reset.</p>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>voc_index_offset</strong> (<em>int</em>) – VOC index representing typical (average) conditions. The default
+value is 100.</li>
+<li><strong>learning_time_hours</strong> (<em>int</em>) – Time constant of long-term estimator in hours. Past events will be
+forgotten after about twice the learning time. The default value is
+12 hours.</li>
+<li><strong>gating_max_duration_minutes</strong> (<em>int</em>) – Maximum duration of gating in minutes (freeze of estimator during
+high VOC index signal). Set to zero to disable the gating. The
+default value is 180 minutes.</li>
+<li><strong>std_initial</strong> (<em>int</em>) – Initial estimate for standard deviation. Lower value boosts events
+during initial learning period, but may result in larger
+device-to-device variations. The default value is 50.</li>
+</ul>
+</td>
 </tr>
 </tbody>
 </table>
@@ -362,6 +436,51 @@ reset.</p>
 <dt id="sensirion_shdlc_svm40.device.Svm40ShdlcDevice.store_nv_data">
 <code class="descname">store_nv_data</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/sensirion_shdlc_svm40/device.html#Svm40ShdlcDevice.store_nv_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sensirion_shdlc_svm40.device.Svm40ShdlcDevice.store_nv_data" title="Permalink to this definition">¶</a></dt>
 <dd><p>Stores all customer engine parameters to the non-volatile memory.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="sensirion_shdlc_svm40.device.Svm40ShdlcDevice.get_voc_state">
+<code class="descname">get_voc_state</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/sensirion_shdlc_svm40/device.html#Svm40ShdlcDevice.get_voc_state"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sensirion_shdlc_svm40.device.Svm40ShdlcDevice.get_voc_state" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the current VOC algorithm state. Retrieved values can be used to
+set the VOC algorithm state to resume operation after a short
+interruption, skipping initial learning phase. This command is only
+available during measurement mode.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This feature can only be used after at least 3 hours of
+continuous operation.</p>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Current VOC algorithm state.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">list(int)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="sensirion_shdlc_svm40.device.Svm40ShdlcDevice.set_voc_state">
+<code class="descname">set_voc_state</code><span class="sig-paren">(</span><em>state</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sensirion_shdlc_svm40/device.html#Svm40ShdlcDevice.set_voc_state"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sensirion_shdlc_svm40.device.Svm40ShdlcDevice.set_voc_state" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set previously retrieved VOC algorithm state to resume operation after
+a short interruption, skipping initial learning phase. This command is
+only available in idle mode.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This feature should not be used after interruptions of more
+than 10 minutes.</p>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>state</strong> (<em>list</em><em>(</em><em>int</em><em>)</em>) – Current VOC algorithm state.</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
@@ -853,7 +972,7 @@ available)</td>
 <dl class="class">
 <dt id="sensirion_shdlc_svm40.device_errors.Svm40CommandNotAllowedInCurrentState">
 <em class="property">class </em><code class="descclassname">sensirion_shdlc_svm40.device_errors.</code><code class="descname">Svm40CommandNotAllowedInCurrentState</code><a class="reference internal" href="_modules/sensirion_shdlc_svm40/device_errors.html#Svm40CommandNotAllowedInCurrentState"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sensirion_shdlc_svm40.device_errors.Svm40CommandNotAllowedInCurrentState" title="Permalink to this definition">¶</a></dt>
-<dd><p>SHDLC device error for command not allowed in current state.</p>
+<dd><p>Command is not allowed in the current state.</p>
 <dl class="method">
 <dt id="sensirion_shdlc_svm40.device_errors.Svm40CommandNotAllowedInCurrentState.__init__">
 <code class="descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/sensirion_shdlc_svm40/device_errors.html#Svm40CommandNotAllowedInCurrentState.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sensirion_shdlc_svm40.device_errors.Svm40CommandNotAllowedInCurrentState.__init__" title="Permalink to this definition">¶</a></dt>
@@ -919,7 +1038,7 @@ set self.__traceback__ to tb and return self.</p>
 <dl class="class">
 <dt id="sensirion_shdlc_svm40.device_errors.Svm40FatalError">
 <em class="property">class </em><code class="descclassname">sensirion_shdlc_svm40.device_errors.</code><code class="descname">Svm40FatalError</code><a class="reference internal" href="_modules/sensirion_shdlc_svm40/device_errors.html#Svm40FatalError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sensirion_shdlc_svm40.device_errors.Svm40FatalError" title="Permalink to this definition">¶</a></dt>
-<dd><p>SHDLC device error for any other, unspecified error.</p>
+<dd><p>An error without specific error code occurred.</p>
 <dl class="method">
 <dt id="sensirion_shdlc_svm40.device_errors.Svm40FatalError.__init__">
 <code class="descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/sensirion_shdlc_svm40/device_errors.html#Svm40FatalError.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sensirion_shdlc_svm40.device_errors.Svm40FatalError.__init__" title="Permalink to this definition">¶</a></dt>
@@ -993,25 +1112,6 @@ set self.__traceback__ to tb and return self.</p>
 <dt id="sensirion_shdlc_svm40.commands.start_measurement.Svm40CmdStartMeasurementBase.__init__">
 <code class="descname">__init__</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sensirion_shdlc_svm40/commands/start_measurement.html#Svm40CmdStartMeasurementBase.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sensirion_shdlc_svm40.commands.start_measurement.Svm40CmdStartMeasurementBase.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Constructor.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>id</strong> (<em>byte</em>) – Command ID (0..255).</li>
-<li><strong>data</strong> (<em>bytes-like/list</em>) – MOSI data (0..255 bytes).</li>
-<li><strong>max_response_time</strong> (<em>float</em>) – Maximum time the device needs to
-response (used as timeout).</li>
-<li><strong>min_response_length</strong> (<em>byte</em>) – Minimum expected response length.</li>
-<li><strong>max_response_length</strong> (<em>byte</em>) – Maximum expected response length.</li>
-<li><strong>post_processing_time</strong> (<em>float</em>) – Maximum time in seconds the device
-needs for post processing
-(typically 0.0s).</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
 </dd></dl>
 
 <dl class="method">
@@ -1123,15 +1223,16 @@ a device reset) are executed after the response is sent.</p>
 <dl class="class">
 <dt id="sensirion_shdlc_svm40.commands.start_measurement.Svm40CmdStartContinuousMeasurement">
 <em class="property">class </em><code class="descclassname">sensirion_shdlc_svm40.commands.start_measurement.</code><code class="descname">Svm40CmdStartContinuousMeasurement</code><a class="reference internal" href="_modules/sensirion_shdlc_svm40/commands/start_measurement.html#Svm40CmdStartContinuousMeasurement"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sensirion_shdlc_svm40.commands.start_measurement.Svm40CmdStartContinuousMeasurement" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="method">
-<dt id="sensirion_shdlc_svm40.commands.start_measurement.Svm40CmdStartContinuousMeasurement.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/sensirion_shdlc_svm40/commands/start_measurement.html#Svm40CmdStartContinuousMeasurement.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sensirion_shdlc_svm40.commands.start_measurement.Svm40CmdStartContinuousMeasurement.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Start Continuous Measurement Command</p>
 <p>Starts continuous measurement in polling mode.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">This command is only available in idle mode.</p>
 </div>
+<dl class="method">
+<dt id="sensirion_shdlc_svm40.commands.start_measurement.Svm40CmdStartContinuousMeasurement.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/sensirion_shdlc_svm40/commands/start_measurement.html#Svm40CmdStartContinuousMeasurement.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sensirion_shdlc_svm40.commands.start_measurement.Svm40CmdStartContinuousMeasurement.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Constructor.</p>
 </dd></dl>
 
 <dl class="method">
@@ -1251,25 +1352,6 @@ a device reset) are executed after the response is sent.</p>
 <dt id="sensirion_shdlc_svm40.commands.stop_measurement.Svm40CmdStopMeasurementBase.__init__">
 <code class="descname">__init__</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sensirion_shdlc_svm40/commands/stop_measurement.html#Svm40CmdStopMeasurementBase.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sensirion_shdlc_svm40.commands.stop_measurement.Svm40CmdStopMeasurementBase.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Constructor.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>id</strong> (<em>byte</em>) – Command ID (0..255).</li>
-<li><strong>data</strong> (<em>bytes-like/list</em>) – MOSI data (0..255 bytes).</li>
-<li><strong>max_response_time</strong> (<em>float</em>) – Maximum time the device needs to
-response (used as timeout).</li>
-<li><strong>min_response_length</strong> (<em>byte</em>) – Minimum expected response length.</li>
-<li><strong>max_response_length</strong> (<em>byte</em>) – Maximum expected response length.</li>
-<li><strong>post_processing_time</strong> (<em>float</em>) – Maximum time in seconds the device
-needs for post processing
-(typically 0.0s).</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
 </dd></dl>
 
 <dl class="method">
@@ -1381,15 +1463,16 @@ a device reset) are executed after the response is sent.</p>
 <dl class="class">
 <dt id="sensirion_shdlc_svm40.commands.stop_measurement.Svm40CmdStopMeasurement">
 <em class="property">class </em><code class="descclassname">sensirion_shdlc_svm40.commands.stop_measurement.</code><code class="descname">Svm40CmdStopMeasurement</code><a class="reference internal" href="_modules/sensirion_shdlc_svm40/commands/stop_measurement.html#Svm40CmdStopMeasurement"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sensirion_shdlc_svm40.commands.stop_measurement.Svm40CmdStopMeasurement" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="method">
-<dt id="sensirion_shdlc_svm40.commands.stop_measurement.Svm40CmdStopMeasurement.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/sensirion_shdlc_svm40/commands/stop_measurement.html#Svm40CmdStopMeasurement.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sensirion_shdlc_svm40.commands.stop_measurement.Svm40CmdStopMeasurement.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Stop Measurement Command</p>
 <p>Leaves the measurement mode and returns to the idle mode.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">This command is only available in measurement mode.</p>
 </div>
+<dl class="method">
+<dt id="sensirion_shdlc_svm40.commands.stop_measurement.Svm40CmdStopMeasurement.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/sensirion_shdlc_svm40/commands/stop_measurement.html#Svm40CmdStopMeasurement.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sensirion_shdlc_svm40.commands.stop_measurement.Svm40CmdStopMeasurement.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Constructor.</p>
 </dd></dl>
 
 <dl class="method">
@@ -1509,25 +1592,6 @@ a device reset) are executed after the response is sent.</p>
 <dt id="sensirion_shdlc_svm40.commands.read_measured_values.Svm40CmdReadMeasuredValuesBase.__init__">
 <code class="descname">__init__</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sensirion_shdlc_svm40/commands/read_measured_values.html#Svm40CmdReadMeasuredValuesBase.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sensirion_shdlc_svm40.commands.read_measured_values.Svm40CmdReadMeasuredValuesBase.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Constructor.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>id</strong> (<em>byte</em>) – Command ID (0..255).</li>
-<li><strong>data</strong> (<em>bytes-like/list</em>) – MOSI data (0..255 bytes).</li>
-<li><strong>max_response_time</strong> (<em>float</em>) – Maximum time the device needs to
-response (used as timeout).</li>
-<li><strong>min_response_length</strong> (<em>byte</em>) – Minimum expected response length.</li>
-<li><strong>max_response_length</strong> (<em>byte</em>) – Maximum expected response length.</li>
-<li><strong>post_processing_time</strong> (<em>float</em>) – Maximum time in seconds the device
-needs for post processing
-(typically 0.0s).</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
 </dd></dl>
 
 <dl class="method">
@@ -1639,20 +1703,21 @@ a device reset) are executed after the response is sent.</p>
 <dl class="class">
 <dt id="sensirion_shdlc_svm40.commands.read_measured_values.Svm40CmdReadMeasuredValuesAsIntegers">
 <em class="property">class </em><code class="descclassname">sensirion_shdlc_svm40.commands.read_measured_values.</code><code class="descname">Svm40CmdReadMeasuredValuesAsIntegers</code><a class="reference internal" href="_modules/sensirion_shdlc_svm40/commands/read_measured_values.html#Svm40CmdReadMeasuredValuesAsIntegers"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sensirion_shdlc_svm40.commands.read_measured_values.Svm40CmdReadMeasuredValuesAsIntegers" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="method">
-<dt id="sensirion_shdlc_svm40.commands.read_measured_values.Svm40CmdReadMeasuredValuesAsIntegers.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/sensirion_shdlc_svm40/commands/read_measured_values.html#Svm40CmdReadMeasuredValuesAsIntegers.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sensirion_shdlc_svm40.commands.read_measured_values.Svm40CmdReadMeasuredValuesAsIntegers.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Read Measured Values As Integers Command</p>
 <p>Returns the new measurement results as integers.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">This command is only available in measurement mode. The
-firmware updates the measurement values every second. Polling
-data with a faster sampling rate will return the same values.
-The first measurement is available 1 second after the start
-measurement command is issued. Any readout prior to this will
-return zero initialized values.</p>
+<p class="last">This command is only available in measurement mode. The firmware
+updates the measurement values every second. Polling data with a
+faster sampling rate will return the same values. The first
+measurement is available 1 second after the start measurement
+command is issued. Any readout prior to this will return zero
+initialized values.</p>
 </div>
+<dl class="method">
+<dt id="sensirion_shdlc_svm40.commands.read_measured_values.Svm40CmdReadMeasuredValuesAsIntegers.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/sensirion_shdlc_svm40/commands/read_measured_values.html#Svm40CmdReadMeasuredValuesAsIntegers.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sensirion_shdlc_svm40.commands.read_measured_values.Svm40CmdReadMeasuredValuesAsIntegers.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Constructor.</p>
 </dd></dl>
 
 <dl class="staticmethod">
@@ -1664,12 +1729,12 @@ return zero initialized values.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><ul class="simple">
 <li>voc_index (int) -
-VOC engine output in ppb with a scaling value of 10.</li>
+VOC algorithm output with a scaling value of 10.</li>
 <li>humidity (int) -
 Compensated ambient humidity in % RH with a scaling factor of
 100.</li>
 <li>temperature (int) -
-Compensated ambient temperatur in degrees celsius with a scaling
+Compensated ambient temperature in degrees celsius with a scaling
 of 200.</li>
 </ul>
 </td>
@@ -1769,20 +1834,21 @@ a device reset) are executed after the response is sent.</p>
 <dl class="class">
 <dt id="sensirion_shdlc_svm40.commands.read_measured_values.Svm40CmdReadMeasuredValuesAsIntegersWithRawParameters">
 <em class="property">class </em><code class="descclassname">sensirion_shdlc_svm40.commands.read_measured_values.</code><code class="descname">Svm40CmdReadMeasuredValuesAsIntegersWithRawParameters</code><a class="reference internal" href="_modules/sensirion_shdlc_svm40/commands/read_measured_values.html#Svm40CmdReadMeasuredValuesAsIntegersWithRawParameters"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sensirion_shdlc_svm40.commands.read_measured_values.Svm40CmdReadMeasuredValuesAsIntegersWithRawParameters" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="method">
-<dt id="sensirion_shdlc_svm40.commands.read_measured_values.Svm40CmdReadMeasuredValuesAsIntegersWithRawParameters.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/sensirion_shdlc_svm40/commands/read_measured_values.html#Svm40CmdReadMeasuredValuesAsIntegersWithRawParameters.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sensirion_shdlc_svm40.commands.read_measured_values.Svm40CmdReadMeasuredValuesAsIntegersWithRawParameters.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Read Measured Values As Integers With Raw Parameters Command</p>
 <p>Returns the new measurement results as integers with raw values added.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">This command is only available in measurement mode. The
-firmware updates the measurement values every second. Polling
-data with a faster sampling rate will return the same values.
-The first measurement is available 1 second after the start
-measurement command is issued. Any readout prior to this will
-return zero initialized values.</p>
+<p class="last">This command is only available in measurement mode. The firmware
+updates the measurement values every second. Polling data with a
+faster sampling rate will return the same values. The first
+measurement is available 1 second after the start measurement
+command is issued. Any readout prior to this will return zero
+initialized values.</p>
 </div>
+<dl class="method">
+<dt id="sensirion_shdlc_svm40.commands.read_measured_values.Svm40CmdReadMeasuredValuesAsIntegersWithRawParameters.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/sensirion_shdlc_svm40/commands/read_measured_values.html#Svm40CmdReadMeasuredValuesAsIntegersWithRawParameters.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sensirion_shdlc_svm40.commands.read_measured_values.Svm40CmdReadMeasuredValuesAsIntegersWithRawParameters.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Constructor.</p>
 </dd></dl>
 
 <dl class="staticmethod">
@@ -1794,12 +1860,12 @@ return zero initialized values.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><ul class="simple">
 <li>voc_index (int) -
-VOC engine output in ppb with a scaling value of 10.</li>
+VOC algorithm output with a scaling value of 10.</li>
 <li>humidity (int) -
 Compensated ambient humidity in % RH with a scaling factor of
 100.</li>
 <li>temperature (int) -
-Compensated ambient temperatur in degrees celsius with a scaling
+Compensated ambient temperature in degrees celsius with a scaling
 of 200.</li>
 <li>raw_voc_ticks (int) -
 Raw VOC output ticks as read from the SGP sensor.</li>
@@ -1807,7 +1873,7 @@ Raw VOC output ticks as read from the SGP sensor.</li>
 Uncompensated raw humidity in % RH as read from the SHT40 with a
 scaling factor of 100.</li>
 <li>raw_temperature (int) -
-Uncompensated raw temperatur in degrees celsius as read from the
+Uncompensated raw temperature in degrees celsius as read from the
 SHT40 with a scaling of 200.</li>
 </ul>
 </td>
@@ -1905,500 +1971,8 @@ a device reset) are executed after the response is sent.</p>
 </dd></dl>
 
 </div>
-<div class="section" id="module-sensirion_shdlc_svm40.commands.customer_engine_parameters">
-<span id="customer-engine-parameters"></span><h3>Customer Engine Parameters<a class="headerlink" href="#module-sensirion_shdlc_svm40.commands.customer_engine_parameters" title="Permalink to this headline">¶</a></h3>
-<dl class="class">
-<dt id="sensirion_shdlc_svm40.commands.customer_engine_parameters.Svm40CmdCustomerEngineParametersBase">
-<em class="property">class </em><code class="descclassname">sensirion_shdlc_svm40.commands.customer_engine_parameters.</code><code class="descname">Svm40CmdCustomerEngineParametersBase</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sensirion_shdlc_svm40/commands/customer_engine_parameters.html#Svm40CmdCustomerEngineParametersBase"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sensirion_shdlc_svm40.commands.customer_engine_parameters.Svm40CmdCustomerEngineParametersBase" title="Permalink to this definition">¶</a></dt>
-<dd><p>SHDLC command 0x60: “Customer Engine Parameters”.</p>
-<dl class="method">
-<dt id="sensirion_shdlc_svm40.commands.customer_engine_parameters.Svm40CmdCustomerEngineParametersBase.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sensirion_shdlc_svm40/commands/customer_engine_parameters.html#Svm40CmdCustomerEngineParametersBase.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sensirion_shdlc_svm40.commands.customer_engine_parameters.Svm40CmdCustomerEngineParametersBase.__init__" title="Permalink to this definition">¶</a></dt>
-<dd><p>Constructor.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>id</strong> (<em>byte</em>) – Command ID (0..255).</li>
-<li><strong>data</strong> (<em>bytes-like/list</em>) – MOSI data (0..255 bytes).</li>
-<li><strong>max_response_time</strong> (<em>float</em>) – Maximum time the device needs to
-response (used as timeout).</li>
-<li><strong>min_response_length</strong> (<em>byte</em>) – Minimum expected response length.</li>
-<li><strong>max_response_length</strong> (<em>byte</em>) – Maximum expected response length.</li>
-<li><strong>post_processing_time</strong> (<em>float</em>) – Maximum time in seconds the device
-needs for post processing
-(typically 0.0s).</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="sensirion_shdlc_svm40.commands.customer_engine_parameters.Svm40CmdCustomerEngineParametersBase.check_response_length">
-<code class="descname">check_response_length</code><span class="sig-paren">(</span><em>data</em><span class="sig-paren">)</span><a class="headerlink" href="#sensirion_shdlc_svm40.commands.customer_engine_parameters.Svm40CmdCustomerEngineParametersBase.check_response_length" title="Permalink to this definition">¶</a></dt>
-<dd><p>Check if the response length is correct.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>data</strong> (<em>bytes</em>) – Raw data (payload) received from the device.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><a class="reference external" href="https://sensirion.github.io/python-shdlc-driver/api.html#sensirion_shdlc_driver.errors.ShdlcResponseError" title="(in Sensirion SHDLC Python Driver v0.1.6)"><strong>ShdlcResponseError</strong></a> – If length is wrong.</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="sensirion_shdlc_svm40.commands.customer_engine_parameters.Svm40CmdCustomerEngineParametersBase.data">
-<code class="descname">data</code><a class="headerlink" href="#sensirion_shdlc_svm40.commands.customer_engine_parameters.Svm40CmdCustomerEngineParametersBase.data" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the command data (payload).</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Command data (length 0..255).</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">bytes</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="sensirion_shdlc_svm40.commands.customer_engine_parameters.Svm40CmdCustomerEngineParametersBase.id">
-<code class="descname">id</code><a class="headerlink" href="#sensirion_shdlc_svm40.commands.customer_engine_parameters.Svm40CmdCustomerEngineParametersBase.id" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the command ID.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Command ID (0..255).</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">byte</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="sensirion_shdlc_svm40.commands.customer_engine_parameters.Svm40CmdCustomerEngineParametersBase.interpret_response">
-<code class="descname">interpret_response</code><span class="sig-paren">(</span><em>data</em><span class="sig-paren">)</span><a class="headerlink" href="#sensirion_shdlc_svm40.commands.customer_engine_parameters.Svm40CmdCustomerEngineParametersBase.interpret_response" title="Permalink to this definition">¶</a></dt>
-<dd><p>Interpret the response to this command received from the device. This
-converts the raw byte array to the actual data type(s) depending on the
-sent command.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>data</strong> (<em>bytes</em>) – Raw data (payload) received from the device.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Interpreted response. Data type and meaning depends on the
-sent command. None for commands without response data. See the
-actual command implementation for details.</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="sensirion_shdlc_svm40.commands.customer_engine_parameters.Svm40CmdCustomerEngineParametersBase.max_response_time">
-<code class="descname">max_response_time</code><a class="headerlink" href="#sensirion_shdlc_svm40.commands.customer_engine_parameters.Svm40CmdCustomerEngineParametersBase.max_response_time" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the maximum response time for this command.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Maximum response time in seconds.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">float</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="sensirion_shdlc_svm40.commands.customer_engine_parameters.Svm40CmdCustomerEngineParametersBase.post_processing_time">
-<code class="descname">post_processing_time</code><a class="headerlink" href="#sensirion_shdlc_svm40.commands.customer_engine_parameters.Svm40CmdCustomerEngineParametersBase.post_processing_time" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the post processing time for this command. The post processing time
-defines how long a device needs to execute a command <em>after</em> responding
-to the SHDLC command. Most devices don’t need post processing (command
-is executed <em>before</em> the response is sent). Only special commands (e.g.
-a device reset) are executed after the response is sent.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Maximum response time in seconds.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">float</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="class">
-<dt id="sensirion_shdlc_svm40.commands.customer_engine_parameters.Svm40CmdGetTOffset">
-<em class="property">class </em><code class="descclassname">sensirion_shdlc_svm40.commands.customer_engine_parameters.</code><code class="descname">Svm40CmdGetTOffset</code><a class="reference internal" href="_modules/sensirion_shdlc_svm40/commands/customer_engine_parameters.html#Svm40CmdGetTOffset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sensirion_shdlc_svm40.commands.customer_engine_parameters.Svm40CmdGetTOffset" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="method">
-<dt id="sensirion_shdlc_svm40.commands.customer_engine_parameters.Svm40CmdGetTOffset.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/sensirion_shdlc_svm40/commands/customer_engine_parameters.html#Svm40CmdGetTOffset.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sensirion_shdlc_svm40.commands.customer_engine_parameters.Svm40CmdGetTOffset.__init__" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get T Offset Command</p>
-<p>Gets the customer T-Offset for the temperature compensation.</p>
-</dd></dl>
-
-<dl class="staticmethod">
-<dt id="sensirion_shdlc_svm40.commands.customer_engine_parameters.Svm40CmdGetTOffset.interpret_response">
-<em class="property">static </em><code class="descname">interpret_response</code><span class="sig-paren">(</span><em>data</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sensirion_shdlc_svm40/commands/customer_engine_parameters.html#Svm40CmdGetTOffset.interpret_response"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sensirion_shdlc_svm40.commands.customer_engine_parameters.Svm40CmdGetTOffset.interpret_response" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Customer temperature offset in degrees celsius.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">float</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="sensirion_shdlc_svm40.commands.customer_engine_parameters.Svm40CmdGetTOffset.check_response_length">
-<code class="descname">check_response_length</code><span class="sig-paren">(</span><em>data</em><span class="sig-paren">)</span><a class="headerlink" href="#sensirion_shdlc_svm40.commands.customer_engine_parameters.Svm40CmdGetTOffset.check_response_length" title="Permalink to this definition">¶</a></dt>
-<dd><p>Check if the response length is correct.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>data</strong> (<em>bytes</em>) – Raw data (payload) received from the device.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><a class="reference external" href="https://sensirion.github.io/python-shdlc-driver/api.html#sensirion_shdlc_driver.errors.ShdlcResponseError" title="(in Sensirion SHDLC Python Driver v0.1.6)"><strong>ShdlcResponseError</strong></a> – If length is wrong.</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="sensirion_shdlc_svm40.commands.customer_engine_parameters.Svm40CmdGetTOffset.data">
-<code class="descname">data</code><a class="headerlink" href="#sensirion_shdlc_svm40.commands.customer_engine_parameters.Svm40CmdGetTOffset.data" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the command data (payload).</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Command data (length 0..255).</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">bytes</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="sensirion_shdlc_svm40.commands.customer_engine_parameters.Svm40CmdGetTOffset.id">
-<code class="descname">id</code><a class="headerlink" href="#sensirion_shdlc_svm40.commands.customer_engine_parameters.Svm40CmdGetTOffset.id" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the command ID.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Command ID (0..255).</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">byte</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="sensirion_shdlc_svm40.commands.customer_engine_parameters.Svm40CmdGetTOffset.max_response_time">
-<code class="descname">max_response_time</code><a class="headerlink" href="#sensirion_shdlc_svm40.commands.customer_engine_parameters.Svm40CmdGetTOffset.max_response_time" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the maximum response time for this command.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Maximum response time in seconds.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">float</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="sensirion_shdlc_svm40.commands.customer_engine_parameters.Svm40CmdGetTOffset.post_processing_time">
-<code class="descname">post_processing_time</code><a class="headerlink" href="#sensirion_shdlc_svm40.commands.customer_engine_parameters.Svm40CmdGetTOffset.post_processing_time" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the post processing time for this command. The post processing time
-defines how long a device needs to execute a command <em>after</em> responding
-to the SHDLC command. Most devices don’t need post processing (command
-is executed <em>before</em> the response is sent). Only special commands (e.g.
-a device reset) are executed after the response is sent.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Maximum response time in seconds.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">float</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="class">
-<dt id="sensirion_shdlc_svm40.commands.customer_engine_parameters.Svm40CmdStoreNvData">
-<em class="property">class </em><code class="descclassname">sensirion_shdlc_svm40.commands.customer_engine_parameters.</code><code class="descname">Svm40CmdStoreNvData</code><a class="reference internal" href="_modules/sensirion_shdlc_svm40/commands/customer_engine_parameters.html#Svm40CmdStoreNvData"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sensirion_shdlc_svm40.commands.customer_engine_parameters.Svm40CmdStoreNvData" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="method">
-<dt id="sensirion_shdlc_svm40.commands.customer_engine_parameters.Svm40CmdStoreNvData.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/sensirion_shdlc_svm40/commands/customer_engine_parameters.html#Svm40CmdStoreNvData.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sensirion_shdlc_svm40.commands.customer_engine_parameters.Svm40CmdStoreNvData.__init__" title="Permalink to this definition">¶</a></dt>
-<dd><p>Store Nv Data Command</p>
-<p>Stores all customer engine parameters to the non-volatile memory.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="sensirion_shdlc_svm40.commands.customer_engine_parameters.Svm40CmdStoreNvData.check_response_length">
-<code class="descname">check_response_length</code><span class="sig-paren">(</span><em>data</em><span class="sig-paren">)</span><a class="headerlink" href="#sensirion_shdlc_svm40.commands.customer_engine_parameters.Svm40CmdStoreNvData.check_response_length" title="Permalink to this definition">¶</a></dt>
-<dd><p>Check if the response length is correct.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>data</strong> (<em>bytes</em>) – Raw data (payload) received from the device.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><a class="reference external" href="https://sensirion.github.io/python-shdlc-driver/api.html#sensirion_shdlc_driver.errors.ShdlcResponseError" title="(in Sensirion SHDLC Python Driver v0.1.6)"><strong>ShdlcResponseError</strong></a> – If length is wrong.</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="sensirion_shdlc_svm40.commands.customer_engine_parameters.Svm40CmdStoreNvData.data">
-<code class="descname">data</code><a class="headerlink" href="#sensirion_shdlc_svm40.commands.customer_engine_parameters.Svm40CmdStoreNvData.data" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the command data (payload).</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Command data (length 0..255).</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">bytes</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="sensirion_shdlc_svm40.commands.customer_engine_parameters.Svm40CmdStoreNvData.id">
-<code class="descname">id</code><a class="headerlink" href="#sensirion_shdlc_svm40.commands.customer_engine_parameters.Svm40CmdStoreNvData.id" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the command ID.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Command ID (0..255).</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">byte</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="sensirion_shdlc_svm40.commands.customer_engine_parameters.Svm40CmdStoreNvData.interpret_response">
-<code class="descname">interpret_response</code><span class="sig-paren">(</span><em>data</em><span class="sig-paren">)</span><a class="headerlink" href="#sensirion_shdlc_svm40.commands.customer_engine_parameters.Svm40CmdStoreNvData.interpret_response" title="Permalink to this definition">¶</a></dt>
-<dd><p>Interpret the response to this command received from the device. This
-converts the raw byte array to the actual data type(s) depending on the
-sent command.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>data</strong> (<em>bytes</em>) – Raw data (payload) received from the device.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Interpreted response. Data type and meaning depends on the
-sent command. None for commands without response data. See the
-actual command implementation for details.</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="sensirion_shdlc_svm40.commands.customer_engine_parameters.Svm40CmdStoreNvData.max_response_time">
-<code class="descname">max_response_time</code><a class="headerlink" href="#sensirion_shdlc_svm40.commands.customer_engine_parameters.Svm40CmdStoreNvData.max_response_time" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the maximum response time for this command.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Maximum response time in seconds.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">float</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="sensirion_shdlc_svm40.commands.customer_engine_parameters.Svm40CmdStoreNvData.post_processing_time">
-<code class="descname">post_processing_time</code><a class="headerlink" href="#sensirion_shdlc_svm40.commands.customer_engine_parameters.Svm40CmdStoreNvData.post_processing_time" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the post processing time for this command. The post processing time
-defines how long a device needs to execute a command <em>after</em> responding
-to the SHDLC command. Most devices don’t need post processing (command
-is executed <em>before</em> the response is sent). Only special commands (e.g.
-a device reset) are executed after the response is sent.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Maximum response time in seconds.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">float</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="class">
-<dt id="sensirion_shdlc_svm40.commands.customer_engine_parameters.Svm40CmdSetTOffset">
-<em class="property">class </em><code class="descclassname">sensirion_shdlc_svm40.commands.customer_engine_parameters.</code><code class="descname">Svm40CmdSetTOffset</code><span class="sig-paren">(</span><em>t_offset</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sensirion_shdlc_svm40/commands/customer_engine_parameters.html#Svm40CmdSetTOffset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sensirion_shdlc_svm40.commands.customer_engine_parameters.Svm40CmdSetTOffset" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="method">
-<dt id="sensirion_shdlc_svm40.commands.customer_engine_parameters.Svm40CmdSetTOffset.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><em>t_offset</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sensirion_shdlc_svm40/commands/customer_engine_parameters.html#Svm40CmdSetTOffset.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sensirion_shdlc_svm40.commands.customer_engine_parameters.Svm40CmdSetTOffset.__init__" title="Permalink to this definition">¶</a></dt>
-<dd><p>Set T Offset Command</p>
-<p>Sets the customer T-Offset for the temperature compensation.</p>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">Execute the store command after writing the parameter to
-store it in the non-volatile memory of the device otherwise
-the parameter will be reset upton a device reset.</p>
-</div>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>t_offset</strong> (<em>float</em>) – Customer temperature offset in degrees celsius.</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="sensirion_shdlc_svm40.commands.customer_engine_parameters.Svm40CmdSetTOffset.check_response_length">
-<code class="descname">check_response_length</code><span class="sig-paren">(</span><em>data</em><span class="sig-paren">)</span><a class="headerlink" href="#sensirion_shdlc_svm40.commands.customer_engine_parameters.Svm40CmdSetTOffset.check_response_length" title="Permalink to this definition">¶</a></dt>
-<dd><p>Check if the response length is correct.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>data</strong> (<em>bytes</em>) – Raw data (payload) received from the device.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><a class="reference external" href="https://sensirion.github.io/python-shdlc-driver/api.html#sensirion_shdlc_driver.errors.ShdlcResponseError" title="(in Sensirion SHDLC Python Driver v0.1.6)"><strong>ShdlcResponseError</strong></a> – If length is wrong.</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="sensirion_shdlc_svm40.commands.customer_engine_parameters.Svm40CmdSetTOffset.data">
-<code class="descname">data</code><a class="headerlink" href="#sensirion_shdlc_svm40.commands.customer_engine_parameters.Svm40CmdSetTOffset.data" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the command data (payload).</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Command data (length 0..255).</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">bytes</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="sensirion_shdlc_svm40.commands.customer_engine_parameters.Svm40CmdSetTOffset.id">
-<code class="descname">id</code><a class="headerlink" href="#sensirion_shdlc_svm40.commands.customer_engine_parameters.Svm40CmdSetTOffset.id" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the command ID.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Command ID (0..255).</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">byte</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="sensirion_shdlc_svm40.commands.customer_engine_parameters.Svm40CmdSetTOffset.interpret_response">
-<code class="descname">interpret_response</code><span class="sig-paren">(</span><em>data</em><span class="sig-paren">)</span><a class="headerlink" href="#sensirion_shdlc_svm40.commands.customer_engine_parameters.Svm40CmdSetTOffset.interpret_response" title="Permalink to this definition">¶</a></dt>
-<dd><p>Interpret the response to this command received from the device. This
-converts the raw byte array to the actual data type(s) depending on the
-sent command.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>data</strong> (<em>bytes</em>) – Raw data (payload) received from the device.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Interpreted response. Data type and meaning depends on the
-sent command. None for commands without response data. See the
-actual command implementation for details.</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="sensirion_shdlc_svm40.commands.customer_engine_parameters.Svm40CmdSetTOffset.max_response_time">
-<code class="descname">max_response_time</code><a class="headerlink" href="#sensirion_shdlc_svm40.commands.customer_engine_parameters.Svm40CmdSetTOffset.max_response_time" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the maximum response time for this command.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Maximum response time in seconds.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">float</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="sensirion_shdlc_svm40.commands.customer_engine_parameters.Svm40CmdSetTOffset.post_processing_time">
-<code class="descname">post_processing_time</code><a class="headerlink" href="#sensirion_shdlc_svm40.commands.customer_engine_parameters.Svm40CmdSetTOffset.post_processing_time" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the post processing time for this command. The post processing time
-defines how long a device needs to execute a command <em>after</em> responding
-to the SHDLC command. Most devices don’t need post processing (command
-is executed <em>before</em> the response is sent). Only special commands (e.g.
-a device reset) are executed after the response is sent.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Maximum response time in seconds.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">float</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-</dd></dl>
-
+<div class="section" id="customer-engine-parameters">
+<h3>Customer Engine Parameters<a class="headerlink" href="#customer-engine-parameters" title="Permalink to this headline">¶</a></h3>
 </div>
 <div class="section" id="module-sensirion_shdlc_svm40.commands.device_information">
 <span id="device-information"></span><h3>Device Information<a class="headerlink" href="#module-sensirion_shdlc_svm40.commands.device_information" title="Permalink to this headline">¶</a></h3>
@@ -2410,25 +1984,6 @@ a device reset) are executed after the response is sent.</p>
 <dt id="sensirion_shdlc_svm40.commands.device_information.Svm40CmdDeviceInformationBase.__init__">
 <code class="descname">__init__</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sensirion_shdlc_svm40/commands/device_information.html#Svm40CmdDeviceInformationBase.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sensirion_shdlc_svm40.commands.device_information.Svm40CmdDeviceInformationBase.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Constructor.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>id</strong> (<em>byte</em>) – Command ID (0..255).</li>
-<li><strong>data</strong> (<em>bytes-like/list</em>) – MOSI data (0..255 bytes).</li>
-<li><strong>max_response_time</strong> (<em>float</em>) – Maximum time the device needs to
-response (used as timeout).</li>
-<li><strong>min_response_length</strong> (<em>byte</em>) – Minimum expected response length.</li>
-<li><strong>max_response_length</strong> (<em>byte</em>) – Maximum expected response length.</li>
-<li><strong>post_processing_time</strong> (<em>float</em>) – Maximum time in seconds the device
-needs for post processing
-(typically 0.0s).</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
 </dd></dl>
 
 <dl class="method">
@@ -2540,11 +2095,12 @@ a device reset) are executed after the response is sent.</p>
 <dl class="class">
 <dt id="sensirion_shdlc_svm40.commands.device_information.Svm40CmdGetProductType">
 <em class="property">class </em><code class="descclassname">sensirion_shdlc_svm40.commands.device_information.</code><code class="descname">Svm40CmdGetProductType</code><a class="reference internal" href="_modules/sensirion_shdlc_svm40/commands/device_information.html#Svm40CmdGetProductType"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sensirion_shdlc_svm40.commands.device_information.Svm40CmdGetProductType" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="method">
-<dt id="sensirion_shdlc_svm40.commands.device_information.Svm40CmdGetProductType.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/sensirion_shdlc_svm40/commands/device_information.html#Svm40CmdGetProductType.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sensirion_shdlc_svm40.commands.device_information.Svm40CmdGetProductType.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get Product Type Command</p>
 <p>Gets the product type from the device.</p>
+<dl class="method">
+<dt id="sensirion_shdlc_svm40.commands.device_information.Svm40CmdGetProductType.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/sensirion_shdlc_svm40/commands/device_information.html#Svm40CmdGetProductType.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sensirion_shdlc_svm40.commands.device_information.Svm40CmdGetProductType.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Constructor.</p>
 </dd></dl>
 
 <dl class="staticmethod">
@@ -2651,11 +2207,12 @@ a device reset) are executed after the response is sent.</p>
 <dl class="class">
 <dt id="sensirion_shdlc_svm40.commands.device_information.Svm40CmdGetProductName">
 <em class="property">class </em><code class="descclassname">sensirion_shdlc_svm40.commands.device_information.</code><code class="descname">Svm40CmdGetProductName</code><a class="reference internal" href="_modules/sensirion_shdlc_svm40/commands/device_information.html#Svm40CmdGetProductName"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sensirion_shdlc_svm40.commands.device_information.Svm40CmdGetProductName" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="method">
-<dt id="sensirion_shdlc_svm40.commands.device_information.Svm40CmdGetProductName.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/sensirion_shdlc_svm40/commands/device_information.html#Svm40CmdGetProductName.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sensirion_shdlc_svm40.commands.device_information.Svm40CmdGetProductName.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get Product Name Command</p>
 <p>Gets the product name from the device.</p>
+<dl class="method">
+<dt id="sensirion_shdlc_svm40.commands.device_information.Svm40CmdGetProductName.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/sensirion_shdlc_svm40/commands/device_information.html#Svm40CmdGetProductName.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sensirion_shdlc_svm40.commands.device_information.Svm40CmdGetProductName.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Constructor.</p>
 </dd></dl>
 
 <dl class="staticmethod">
@@ -2762,11 +2319,12 @@ a device reset) are executed after the response is sent.</p>
 <dl class="class">
 <dt id="sensirion_shdlc_svm40.commands.device_information.Svm40CmdGetSerialNumber">
 <em class="property">class </em><code class="descclassname">sensirion_shdlc_svm40.commands.device_information.</code><code class="descname">Svm40CmdGetSerialNumber</code><a class="reference internal" href="_modules/sensirion_shdlc_svm40/commands/device_information.html#Svm40CmdGetSerialNumber"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sensirion_shdlc_svm40.commands.device_information.Svm40CmdGetSerialNumber" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="method">
-<dt id="sensirion_shdlc_svm40.commands.device_information.Svm40CmdGetSerialNumber.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/sensirion_shdlc_svm40/commands/device_information.html#Svm40CmdGetSerialNumber.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sensirion_shdlc_svm40.commands.device_information.Svm40CmdGetSerialNumber.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get Serial Number Command</p>
 <p>Gets the serial number from the device.</p>
+<dl class="method">
+<dt id="sensirion_shdlc_svm40.commands.device_information.Svm40CmdGetSerialNumber.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/sensirion_shdlc_svm40/commands/device_information.html#Svm40CmdGetSerialNumber.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sensirion_shdlc_svm40.commands.device_information.Svm40CmdGetSerialNumber.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Constructor.</p>
 </dd></dl>
 
 <dl class="staticmethod">
@@ -2881,25 +2439,6 @@ a device reset) are executed after the response is sent.</p>
 <dt id="sensirion_shdlc_svm40.commands.get_version.Svm40CmdGetVersionBase.__init__">
 <code class="descname">__init__</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sensirion_shdlc_svm40/commands/get_version.html#Svm40CmdGetVersionBase.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sensirion_shdlc_svm40.commands.get_version.Svm40CmdGetVersionBase.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Constructor.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>id</strong> (<em>byte</em>) – Command ID (0..255).</li>
-<li><strong>data</strong> (<em>bytes-like/list</em>) – MOSI data (0..255 bytes).</li>
-<li><strong>max_response_time</strong> (<em>float</em>) – Maximum time the device needs to
-response (used as timeout).</li>
-<li><strong>min_response_length</strong> (<em>byte</em>) – Minimum expected response length.</li>
-<li><strong>max_response_length</strong> (<em>byte</em>) – Maximum expected response length.</li>
-<li><strong>post_processing_time</strong> (<em>float</em>) – Maximum time in seconds the device
-needs for post processing
-(typically 0.0s).</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
 </dd></dl>
 
 <dl class="method">
@@ -3011,12 +2550,12 @@ a device reset) are executed after the response is sent.</p>
 <dl class="class">
 <dt id="sensirion_shdlc_svm40.commands.get_version.Svm40CmdGetVersion">
 <em class="property">class </em><code class="descclassname">sensirion_shdlc_svm40.commands.get_version.</code><code class="descname">Svm40CmdGetVersion</code><a class="reference internal" href="_modules/sensirion_shdlc_svm40/commands/get_version.html#Svm40CmdGetVersion"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sensirion_shdlc_svm40.commands.get_version.Svm40CmdGetVersion" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="method">
+<dd><p>Get Version Command</p>
+<p>Gets the version information for the hardware, firmware and SHDLC protocol.</p>
+<dl class="method">
 <dt id="sensirion_shdlc_svm40.commands.get_version.Svm40CmdGetVersion.__init__">
 <code class="descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/sensirion_shdlc_svm40/commands/get_version.html#Svm40CmdGetVersion.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sensirion_shdlc_svm40.commands.get_version.Svm40CmdGetVersion.__init__" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get Version Command</p>
-<p>Gets the version information for the hardware, firmware and SHDLC
-protocol.</p>
+<dd><p>Constructor.</p>
 </dd></dl>
 
 <dl class="staticmethod">
@@ -3148,25 +2687,6 @@ a device reset) are executed after the response is sent.</p>
 <dt id="sensirion_shdlc_svm40.commands.device_reset.Svm40CmdDeviceResetBase.__init__">
 <code class="descname">__init__</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sensirion_shdlc_svm40/commands/device_reset.html#Svm40CmdDeviceResetBase.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sensirion_shdlc_svm40.commands.device_reset.Svm40CmdDeviceResetBase.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Constructor.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>id</strong> (<em>byte</em>) – Command ID (0..255).</li>
-<li><strong>data</strong> (<em>bytes-like/list</em>) – MOSI data (0..255 bytes).</li>
-<li><strong>max_response_time</strong> (<em>float</em>) – Maximum time the device needs to
-response (used as timeout).</li>
-<li><strong>min_response_length</strong> (<em>byte</em>) – Minimum expected response length.</li>
-<li><strong>max_response_length</strong> (<em>byte</em>) – Maximum expected response length.</li>
-<li><strong>post_processing_time</strong> (<em>float</em>) – Maximum time in seconds the device
-needs for post processing
-(typically 0.0s).</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
 </dd></dl>
 
 <dl class="method">
@@ -3278,17 +2798,18 @@ a device reset) are executed after the response is sent.</p>
 <dl class="class">
 <dt id="sensirion_shdlc_svm40.commands.device_reset.Svm40CmdDeviceReset">
 <em class="property">class </em><code class="descclassname">sensirion_shdlc_svm40.commands.device_reset.</code><code class="descname">Svm40CmdDeviceReset</code><a class="reference internal" href="_modules/sensirion_shdlc_svm40/commands/device_reset.html#Svm40CmdDeviceReset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sensirion_shdlc_svm40.commands.device_reset.Svm40CmdDeviceReset" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="method">
-<dt id="sensirion_shdlc_svm40.commands.device_reset.Svm40CmdDeviceReset.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/sensirion_shdlc_svm40/commands/device_reset.html#Svm40CmdDeviceReset.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sensirion_shdlc_svm40.commands.device_reset.Svm40CmdDeviceReset.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Device Reset Command</p>
 <p>Executs a reset on the device.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">The device will reply before executing the reset. If the
-command is send with broadcast, the reset is done directly
-after the reception of the command.</p>
+<p class="last">The device will reply before executing the reset. If the command
+is send with broadcast, the reset is done directly after the
+reception of the command.</p>
 </div>
+<dl class="method">
+<dt id="sensirion_shdlc_svm40.commands.device_reset.Svm40CmdDeviceReset.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/sensirion_shdlc_svm40/commands/device_reset.html#Svm40CmdDeviceReset.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sensirion_shdlc_svm40.commands.device_reset.Svm40CmdDeviceReset.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Constructor.</p>
 </dd></dl>
 
 <dl class="method">
@@ -3408,25 +2929,6 @@ a device reset) are executed after the response is sent.</p>
 <dt id="sensirion_shdlc_svm40.commands.get_system_up_time.Svm40CmdGetSystemUpTimeBase.__init__">
 <code class="descname">__init__</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sensirion_shdlc_svm40/commands/get_system_up_time.html#Svm40CmdGetSystemUpTimeBase.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sensirion_shdlc_svm40.commands.get_system_up_time.Svm40CmdGetSystemUpTimeBase.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Constructor.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>id</strong> (<em>byte</em>) – Command ID (0..255).</li>
-<li><strong>data</strong> (<em>bytes-like/list</em>) – MOSI data (0..255 bytes).</li>
-<li><strong>max_response_time</strong> (<em>float</em>) – Maximum time the device needs to
-response (used as timeout).</li>
-<li><strong>min_response_length</strong> (<em>byte</em>) – Minimum expected response length.</li>
-<li><strong>max_response_length</strong> (<em>byte</em>) – Maximum expected response length.</li>
-<li><strong>post_processing_time</strong> (<em>float</em>) – Maximum time in seconds the device
-needs for post processing
-(typically 0.0s).</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
 </dd></dl>
 
 <dl class="method">
@@ -3538,11 +3040,12 @@ a device reset) are executed after the response is sent.</p>
 <dl class="class">
 <dt id="sensirion_shdlc_svm40.commands.get_system_up_time.Svm40CmdGetSystemUpTime">
 <em class="property">class </em><code class="descclassname">sensirion_shdlc_svm40.commands.get_system_up_time.</code><code class="descname">Svm40CmdGetSystemUpTime</code><a class="reference internal" href="_modules/sensirion_shdlc_svm40/commands/get_system_up_time.html#Svm40CmdGetSystemUpTime"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sensirion_shdlc_svm40.commands.get_system_up_time.Svm40CmdGetSystemUpTime" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="method">
-<dt id="sensirion_shdlc_svm40.commands.get_system_up_time.Svm40CmdGetSystemUpTime.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/sensirion_shdlc_svm40/commands/get_system_up_time.html#Svm40CmdGetSystemUpTime.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sensirion_shdlc_svm40.commands.get_system_up_time.Svm40CmdGetSystemUpTime.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get System Up Time Command</p>
 <p>Get the system up time of the device.</p>
+<dl class="method">
+<dt id="sensirion_shdlc_svm40.commands.get_system_up_time.Svm40CmdGetSystemUpTime.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/sensirion_shdlc_svm40/commands/get_system_up_time.html#Svm40CmdGetSystemUpTime.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sensirion_shdlc_svm40.commands.get_system_up_time.Svm40CmdGetSystemUpTime.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Constructor.</p>
 </dd></dl>
 
 <dl class="staticmethod">
@@ -3657,25 +3160,6 @@ a device reset) are executed after the response is sent.</p>
 <dt id="sensirion_shdlc_svm40.commands.firmware_update.Svm40CmdFirmwareUpdateBase.__init__">
 <code class="descname">__init__</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sensirion_shdlc_svm40/commands/firmware_update.html#Svm40CmdFirmwareUpdateBase.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sensirion_shdlc_svm40.commands.firmware_update.Svm40CmdFirmwareUpdateBase.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Constructor.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>id</strong> (<em>byte</em>) – Command ID (0..255).</li>
-<li><strong>data</strong> (<em>bytes-like/list</em>) – MOSI data (0..255 bytes).</li>
-<li><strong>max_response_time</strong> (<em>float</em>) – Maximum time the device needs to
-response (used as timeout).</li>
-<li><strong>min_response_length</strong> (<em>byte</em>) – Minimum expected response length.</li>
-<li><strong>max_response_length</strong> (<em>byte</em>) – Maximum expected response length.</li>
-<li><strong>post_processing_time</strong> (<em>float</em>) – Maximum time in seconds the device
-needs for post processing
-(typically 0.0s).</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
 </dd></dl>
 
 <dl class="method">
@@ -3787,19 +3271,20 @@ a device reset) are executed after the response is sent.</p>
 <dl class="class">
 <dt id="sensirion_shdlc_svm40.commands.firmware_update.Svm40CmdEnterBootloader">
 <em class="property">class </em><code class="descclassname">sensirion_shdlc_svm40.commands.firmware_update.</code><code class="descname">Svm40CmdEnterBootloader</code><a class="reference internal" href="_modules/sensirion_shdlc_svm40/commands/firmware_update.html#Svm40CmdEnterBootloader"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sensirion_shdlc_svm40.commands.firmware_update.Svm40CmdEnterBootloader" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="method">
-<dt id="sensirion_shdlc_svm40.commands.firmware_update.Svm40CmdEnterBootloader.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/sensirion_shdlc_svm40/commands/firmware_update.html#Svm40CmdEnterBootloader.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sensirion_shdlc_svm40.commands.firmware_update.Svm40CmdEnterBootloader.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Enter Bootloader Command</p>
 <p>Command to enter into the bootloader mode. The device will reboot into
-bootloader mode and wait until the new Firmware is received (start
-update command expected). Even after a power reset, the device returns
-into bootloader mode. The response frame is sent before the reset.</p>
+bootloader mode and wait until the new Firmware is received (start update
+command expected). Even after a power reset, the device returns into
+bootloader mode. The response frame is sent before the reset.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">After the response frame is received, the device will not
-accept new commands until fully booted (wait at least 1 s).</p>
+<p class="last">After the response frame is received, the device will not accept
+new commands until fully booted (wait at least 1 s).</p>
 </div>
+<dl class="method">
+<dt id="sensirion_shdlc_svm40.commands.firmware_update.Svm40CmdEnterBootloader.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/sensirion_shdlc_svm40/commands/firmware_update.html#Svm40CmdEnterBootloader.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sensirion_shdlc_svm40.commands.firmware_update.Svm40CmdEnterBootloader.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Constructor.</p>
 </dd></dl>
 
 <dl class="method">
@@ -3911,17 +3396,18 @@ a device reset) are executed after the response is sent.</p>
 <dl class="class">
 <dt id="sensirion_shdlc_svm40.commands.firmware_update.Svm40CmdStartUpdate">
 <em class="property">class </em><code class="descclassname">sensirion_shdlc_svm40.commands.firmware_update.</code><code class="descname">Svm40CmdStartUpdate</code><a class="reference internal" href="_modules/sensirion_shdlc_svm40/commands/firmware_update.html#Svm40CmdStartUpdate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sensirion_shdlc_svm40.commands.firmware_update.Svm40CmdStartUpdate" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="method">
-<dt id="sensirion_shdlc_svm40.commands.firmware_update.Svm40CmdStartUpdate.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/sensirion_shdlc_svm40/commands/firmware_update.html#Svm40CmdStartUpdate.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sensirion_shdlc_svm40.commands.firmware_update.Svm40CmdStartUpdate.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Start Update Command</p>
 <p>Command to start the firmware update. The devices flash will be erased
-(except bootloader) and the internal pointers resetted. The device is
-then ready to receive the new firmware with the update data command.</p>
+(except bootloader) and the internal pointers resetted. The device is then
+ready to receive the new firmware with the update data command.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">Only supported when in bootloader mode.</p>
 </div>
+<dl class="method">
+<dt id="sensirion_shdlc_svm40.commands.firmware_update.Svm40CmdStartUpdate.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/sensirion_shdlc_svm40/commands/firmware_update.html#Svm40CmdStartUpdate.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sensirion_shdlc_svm40.commands.firmware_update.Svm40CmdStartUpdate.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Constructor.</p>
 </dd></dl>
 
 <dl class="method">
@@ -4033,17 +3519,18 @@ a device reset) are executed after the response is sent.</p>
 <dl class="class">
 <dt id="sensirion_shdlc_svm40.commands.firmware_update.Svm40CmdUpdateData">
 <em class="property">class </em><code class="descclassname">sensirion_shdlc_svm40.commands.firmware_update.</code><code class="descname">Svm40CmdUpdateData</code><span class="sig-paren">(</span><em>data</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sensirion_shdlc_svm40/commands/firmware_update.html#Svm40CmdUpdateData"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sensirion_shdlc_svm40.commands.firmware_update.Svm40CmdUpdateData" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="method">
-<dt id="sensirion_shdlc_svm40.commands.firmware_update.Svm40CmdUpdateData.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><em>data</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sensirion_shdlc_svm40/commands/firmware_update.html#Svm40CmdUpdateData.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sensirion_shdlc_svm40.commands.firmware_update.Svm40CmdUpdateData.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Update Data Command</p>
 <p>Command to send the new firmware data as hex code in binary format.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">Only supported when in bootloader mode after receiving the
-start update command. Send even number of bytes except for
-the last frame.</p>
+<p class="last">Only supported when in bootloader mode after receiving the start
+update command. Send even number of bytes except for the last
+frame.</p>
 </div>
+<dl class="method">
+<dt id="sensirion_shdlc_svm40.commands.firmware_update.Svm40CmdUpdateData.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>data</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sensirion_shdlc_svm40/commands/firmware_update.html#Svm40CmdUpdateData.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sensirion_shdlc_svm40.commands.firmware_update.Svm40CmdUpdateData.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Constructor.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -4163,22 +3650,22 @@ a device reset) are executed after the response is sent.</p>
 <dl class="class">
 <dt id="sensirion_shdlc_svm40.commands.firmware_update.Svm40CmdStopUpdate">
 <em class="property">class </em><code class="descclassname">sensirion_shdlc_svm40.commands.firmware_update.</code><code class="descname">Svm40CmdStopUpdate</code><span class="sig-paren">(</span><em>checksum</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sensirion_shdlc_svm40/commands/firmware_update.html#Svm40CmdStopUpdate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sensirion_shdlc_svm40.commands.firmware_update.Svm40CmdStopUpdate" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="method">
-<dt id="sensirion_shdlc_svm40.commands.firmware_update.Svm40CmdStopUpdate.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><em>checksum</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sensirion_shdlc_svm40/commands/firmware_update.html#Svm40CmdStopUpdate.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sensirion_shdlc_svm40.commands.firmware_update.Svm40CmdStopUpdate.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Stop Update Command</p>
-<p>After all update data frames are sent, the stop update marks the end of
-the update sequence. The checksum is sent to the device and
-verification is done. The device state represents the success of the
-update sequence. If successfully, the device writes the signature and
-reboots into the application.</p>
+<p>After all update data frames are sent, the stop update marks the end of the
+update sequence. The checksum is sent to the device and verification is
+done. The device state represents the success of the update sequence. If
+successfully, the device writes the signature and reboots into the
+application.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">The checksum is calculated the same way as the SHDLC
-checksum. First sum all firmware update data bytes and then
-take the LSB of the result and invert it. This will be the
-checksum.</p>
+<p class="last">The checksum is calculated the same way as the SHDLC checksum.
+First sum all firmware update data bytes and then take the LSB of
+the result and invert it. This will be the checksum.</p>
 </div>
+<dl class="method">
+<dt id="sensirion_shdlc_svm40.commands.firmware_update.Svm40CmdStopUpdate.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>checksum</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sensirion_shdlc_svm40/commands/firmware_update.html#Svm40CmdStopUpdate.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sensirion_shdlc_svm40.commands.firmware_update.Svm40CmdStopUpdate.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Constructor.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />

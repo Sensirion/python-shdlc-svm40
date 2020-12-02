@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>sensirion_shdlc_svm40.commands.get_system_up_time &mdash; sensirion-shdlc-svm40 0.2.2 documentation</title>
+  <title>sensirion_shdlc_svm40.commands.algorithm_states &mdash; sensirion-shdlc-svm40 0.2.2 documentation</title>
   
 
   
@@ -140,7 +140,7 @@
         
           <li><a href="../../index.html">Module code</a> &raquo;</li>
         
-      <li>sensirion_shdlc_svm40.commands.get_system_up_time</li>
+      <li>sensirion_shdlc_svm40.commands.algorithm_states</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -155,7 +155,7 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <h1>Source code for sensirion_shdlc_svm40.commands.get_system_up_time</h1><div class="highlight"><pre>
+  <h1>Source code for sensirion_shdlc_svm40.commands.algorithm_states</h1><div class="highlight"><pre>
 <span></span><span class="c1"># -*- coding: utf-8 -*-</span>
 <span class="c1"># (c) Copyright 2020 Sensirion AG, Switzerland</span>
 
@@ -187,46 +187,81 @@
 <span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="Svm40CmdGetSystemUpTimeBase"><a class="viewcode-back" href="../../../api.html#sensirion_shdlc_svm40.commands.get_system_up_time.Svm40CmdGetSystemUpTimeBase">[docs]</a><span class="k">class</span> <span class="nc">Svm40CmdGetSystemUpTimeBase</span><span class="p">(</span><span class="n">ShdlcCommand</span><span class="p">):</span>
+<div class="viewcode-block" id="Svm40CmdAlgorithmStatesBase"><a class="viewcode-back" href="../../../api.html#sensirion_shdlc_svm40.commands.algorithm_states.Svm40CmdAlgorithmStatesBase">[docs]</a><span class="k">class</span> <span class="nc">Svm40CmdAlgorithmStatesBase</span><span class="p">(</span><span class="n">ShdlcCommand</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    SHDLC command 0x93: &quot;Get System Up Time&quot;.</span>
+<span class="sd">    SHDLC command 0x61: &quot;Algorithm States&quot;.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="Svm40CmdGetSystemUpTimeBase.__init__"><a class="viewcode-back" href="../../../api.html#sensirion_shdlc_svm40.commands.get_system_up_time.Svm40CmdGetSystemUpTimeBase.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="Svm40CmdAlgorithmStatesBase.__init__"><a class="viewcode-back" href="../../../api.html#sensirion_shdlc_svm40.commands.algorithm_states.Svm40CmdAlgorithmStatesBase.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Constructor.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">Svm40CmdGetSystemUpTimeBase</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
-            <span class="mh">0x93</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div></div>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Svm40CmdAlgorithmStatesBase</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="mh">0x61</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div></div>
 
 
-<div class="viewcode-block" id="Svm40CmdGetSystemUpTime"><a class="viewcode-back" href="../../../api.html#sensirion_shdlc_svm40.commands.get_system_up_time.Svm40CmdGetSystemUpTime">[docs]</a><span class="k">class</span> <span class="nc">Svm40CmdGetSystemUpTime</span><span class="p">(</span><span class="n">Svm40CmdGetSystemUpTimeBase</span><span class="p">):</span>
+<div class="viewcode-block" id="Svm40CmdGetVocState"><a class="viewcode-back" href="../../../api.html#sensirion_shdlc_svm40.commands.algorithm_states.Svm40CmdGetVocState">[docs]</a><span class="k">class</span> <span class="nc">Svm40CmdGetVocState</span><span class="p">(</span><span class="n">Svm40CmdAlgorithmStatesBase</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Get System Up Time Command</span>
+<span class="sd">    Get Voc State Command</span>
 
-<span class="sd">    Get the system up time of the device.</span>
+<span class="sd">    Gets the current VOC algorithm state. Retrieved values can be used to set</span>
+<span class="sd">    the VOC algorithm state to resume operation after a short interruption,</span>
+<span class="sd">    skipping initial learning phase. This command is only available during</span>
+<span class="sd">    measurement mode.</span>
+
+<span class="sd">    .. note:: This feature can only be used after at least 3 hours of</span>
+<span class="sd">              continuous operation.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="Svm40CmdGetSystemUpTime.__init__"><a class="viewcode-back" href="../../../api.html#sensirion_shdlc_svm40.commands.get_system_up_time.Svm40CmdGetSystemUpTime.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Svm40CmdGetVocState.__init__"><a class="viewcode-back" href="../../../api.html#sensirion_shdlc_svm40.commands.algorithm_states.Svm40CmdGetVocState.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Constructor.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">Svm40CmdGetSystemUpTime</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
-            <span class="n">data</span><span class="o">=</span><span class="p">[],</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Svm40CmdGetVocState</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="n">data</span><span class="o">=</span><span class="sa">b</span><span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="nb">bytes</span><span class="p">(</span><span class="nb">bytearray</span><span class="p">([</span><span class="mh">0x08</span><span class="p">]))]),</span>
             <span class="n">max_response_time</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span>
             <span class="n">post_processing_time</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
-            <span class="n">min_response_length</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
-            <span class="n">max_response_length</span><span class="o">=</span><span class="mi">4</span>
+            <span class="n">min_response_length</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span>
+            <span class="n">max_response_length</span><span class="o">=</span><span class="mi">8</span>
         <span class="p">)</span></div>
 
-<div class="viewcode-block" id="Svm40CmdGetSystemUpTime.interpret_response"><a class="viewcode-back" href="../../../api.html#sensirion_shdlc_svm40.commands.get_system_up_time.Svm40CmdGetSystemUpTime.interpret_response">[docs]</a>    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="Svm40CmdGetVocState.interpret_response"><a class="viewcode-back" href="../../../api.html#sensirion_shdlc_svm40.commands.algorithm_states.Svm40CmdGetVocState.interpret_response">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">interpret_response</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        :return: The time since the last power-on or device reset in seconds.</span>
-<span class="sd">        :rtype: int</span>
+<span class="sd">        :return: Current VOC algorithm state.</span>
+<span class="sd">        :rtype: list(int)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">system_up_time</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">unpack</span><span class="p">(</span><span class="s2">&quot;&gt;I&quot;</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">4</span><span class="p">])[</span><span class="mi">0</span><span class="p">])</span>  <span class="c1"># uint32</span>
-        <span class="k">return</span> <span class="n">system_up_time</span></div></div>
+        <span class="n">state</span> <span class="o">=</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">ii</span><span class="p">)</span> <span class="k">for</span> <span class="n">ii</span> <span class="ow">in</span> <span class="n">unpack</span><span class="p">(</span><span class="s2">&quot;&gt;</span><span class="si">{}</span><span class="s2">B&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">8</span><span class="p">])</span> <span class="o">//</span> <span class="mi">1</span><span class="p">),</span> <span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">8</span><span class="p">])]</span>  <span class="c1"># list(uint8)</span>
+        <span class="k">return</span> <span class="n">state</span></div></div>
+
+
+<div class="viewcode-block" id="Svm40CmdSetVocState"><a class="viewcode-back" href="../../../api.html#sensirion_shdlc_svm40.commands.algorithm_states.Svm40CmdSetVocState">[docs]</a><span class="k">class</span> <span class="nc">Svm40CmdSetVocState</span><span class="p">(</span><span class="n">Svm40CmdAlgorithmStatesBase</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Set Voc State Command</span>
+
+<span class="sd">    Set previously retrieved VOC algorithm state to resume operation after a</span>
+<span class="sd">    short interruption, skipping initial learning phase. This command is only</span>
+<span class="sd">    available in idle mode.</span>
+
+<span class="sd">    .. note:: This feature should not be used after interruptions of more than</span>
+<span class="sd">              10 minutes.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="Svm40CmdSetVocState.__init__"><a class="viewcode-back" href="../../../api.html#sensirion_shdlc_svm40.commands.algorithm_states.Svm40CmdSetVocState.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Constructor.</span>
+
+<span class="sd">        :param list(int) state:</span>
+<span class="sd">            Current VOC algorithm state.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Svm40CmdSetVocState</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="n">data</span><span class="o">=</span><span class="sa">b</span><span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="nb">bytes</span><span class="p">(</span><span class="nb">bytearray</span><span class="p">([</span><span class="mh">0x88</span><span class="p">])),</span>
+                           <span class="n">pack</span><span class="p">(</span><span class="s2">&quot;&gt;</span><span class="si">{}</span><span class="s2">B&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">state</span><span class="p">)),</span> <span class="o">*</span><span class="n">state</span><span class="p">)]),</span>
+            <span class="n">max_response_time</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span>
+            <span class="n">post_processing_time</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+            <span class="n">min_response_length</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+            <span class="n">max_response_length</span><span class="o">=</span><span class="mi">0</span>
+        <span class="p">)</span></div></div>
 </pre></div>
 
            </div>
@@ -269,7 +304,7 @@
         </dl>
         <dl>
             <dt>Branches</dt>
-            <dd><a href="../../../master/_modules/sensirion_shdlc_svm40/commands/get_system_up_time.html">master</a></dd>
+            <dd><a href="../../../master/_modules/sensirion_shdlc_svm40/commands/algorithm_states.html">master</a></dd>
         </dl>
     </div>
 </div>

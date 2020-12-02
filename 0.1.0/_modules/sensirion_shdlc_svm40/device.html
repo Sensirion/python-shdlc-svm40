@@ -173,10 +173,18 @@
     <span class="n">Svm40CmdStopMeasurement</span><span class="p">,</span> \
     <span class="n">Svm40CmdReadMeasuredValuesAsIntegers</span><span class="p">,</span> \
     <span class="n">Svm40CmdReadMeasuredValuesAsIntegersWithRawParameters</span><span class="p">,</span> \
-    <span class="n">Svm40CmdGetTOffset</span><span class="p">,</span> <span class="n">Svm40CmdSetTOffset</span><span class="p">,</span> <span class="n">Svm40CmdStoreNvData</span>
+    <span class="n">Svm40CmdGetTemperatureOffsetForRhtMeasurements</span><span class="p">,</span> \
+    <span class="n">Svm40CmdGetVocTuningParameters</span><span class="p">,</span> \
+    <span class="n">Svm40CmdStoreNvData</span><span class="p">,</span> \
+    <span class="n">Svm40CmdSetTemperatureOffsetForRhtMeasurements</span><span class="p">,</span> \
+    <span class="n">Svm40CmdSetVocTuningParameters</span><span class="p">,</span> \
+    <span class="n">Svm40CmdGetVocState</span><span class="p">,</span> \
+    <span class="n">Svm40CmdSetVocState</span>
 <span class="kn">from</span> <span class="nn">.response_types</span> <span class="kn">import</span> <span class="n">AirQuality</span><span class="p">,</span> <span class="n">Humidity</span><span class="p">,</span> <span class="n">Temperature</span>
 <span class="kn">from</span> <span class="nn">sensirion_shdlc_driver.types</span> <span class="kn">import</span> <span class="n">FirmwareVersion</span><span class="p">,</span> <span class="n">HardwareVersion</span><span class="p">,</span> \
     <span class="n">ProtocolVersion</span><span class="p">,</span> <span class="n">Version</span>
+<span class="kn">from</span> <span class="nn">struct</span> <span class="kn">import</span> <span class="n">pack</span><span class="p">,</span> <span class="n">unpack</span>
+
 
 <span class="kn">import</span> <span class="nn">logging</span>
 <span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
@@ -292,18 +300,25 @@
 
 <div class="viewcode-block" id="Svm40ShdlcDevice.get_compensation_temperature_offset"><a class="viewcode-back" href="../../api.html#sensirion_shdlc_svm40.device.Svm40ShdlcDevice.get_compensation_temperature_offset">[docs]</a>    <span class="k">def</span> <span class="nf">get_compensation_temperature_offset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Gets the customer temperature offset which is used for the</span>
-<span class="sd">        compensation.</span>
+<span class="sd">        Gets the temperature offset for RHT measurements.</span>
 
-<span class="sd">        :return: Customer temperature offset in degrees celsius.</span>
+<span class="sd">        :return: Temperature offset in degrees celsius.</span>
 <span class="sd">        :rtype: float</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">Svm40CmdGetTOffset</span><span class="p">())</span></div>
+        <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">Svm40CmdGetTemperatureOffsetForRhtMeasurements</span><span class="p">())</span>
+        <span class="c1"># Firmware versions prior to 2.0 will return a float value (4 bytes)</span>
+        <span class="c1"># and for firmware version &gt;= 2.0 an int16 value (2 bytes) is returned.</span>
+        <span class="n">t_offset</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="n">t_offset</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">unpack</span><span class="p">(</span><span class="s1">&#39;&gt;h&#39;</span><span class="p">,</span> <span class="n">data</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span> <span class="o">/</span> <span class="mf">200.</span>
+        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="o">==</span> <span class="mi">4</span><span class="p">:</span>
+            <span class="n">t_offset</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">unpack</span><span class="p">(</span><span class="s1">&#39;&gt;f&#39;</span><span class="p">,</span> <span class="n">data</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">t_offset</span></div>
 
-<div class="viewcode-block" id="Svm40ShdlcDevice.set_compensation_temperature_offset"><a class="viewcode-back" href="../../api.html#sensirion_shdlc_svm40.device.Svm40ShdlcDevice.set_compensation_temperature_offset">[docs]</a>    <span class="k">def</span> <span class="nf">set_compensation_temperature_offset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t_offset</span><span class="p">):</span>
+<div class="viewcode-block" id="Svm40ShdlcDevice.set_compensation_temperature_offset"><a class="viewcode-back" href="../../api.html#sensirion_shdlc_svm40.device.Svm40ShdlcDevice.set_compensation_temperature_offset">[docs]</a>    <span class="k">def</span> <span class="nf">set_compensation_temperature_offset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t_offset</span><span class="p">,</span>
+                                            <span class="n">send_as_integer</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Sets the customer temperature offset which is used for the</span>
-<span class="sd">        compensation.</span>
+<span class="sd">        Sets the temperature offset for RHT measurements.</span>
 
 <span class="sd">        .. note:: Execute the command</span>
 <span class="sd">            :py:meth:`~sensirion_shdlc_svm40.device.store_nv_data` command</span>
@@ -311,16 +326,108 @@
 <span class="sd">            of the device otherwise the parameter will be reset upton a device</span>
 <span class="sd">            reset.</span>
 
-<span class="sd">        :param float t_offset:</span>
-<span class="sd">            Customer temperature offset in degrees celsius.</span>
+<span class="sd">        :param float t_offset: Temperature offset in degrees celsius.</span>
+<span class="sd">        :param bool send_as_integer:</span>
+<span class="sd">            Set to `True` to use the integer format. This option was added for</span>
+<span class="sd">            firmware version &gt;= 2.0 which will accepted either a float value</span>
+<span class="sd">            (4 bytes) or an int16 value (2 bytes). Firmware versions prior to</span>
+<span class="sd">            2.0 will only accept the float format. Float temperature values are</span>
+<span class="sd">            in degrees celsius with no scaling. Integer temperature</span>
+<span class="sd">            values are in degrees celsius with a scaling of 200.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">Svm40CmdSetTOffset</span><span class="p">(</span><span class="n">t_offset</span><span class="p">))</span></div>
+        <span class="k">if</span> <span class="n">send_as_integer</span><span class="p">:</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">pack</span><span class="p">(</span><span class="s1">&#39;&gt;h&#39;</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">t_offset</span> <span class="o">*</span> <span class="mi">200</span><span class="p">)))</span>  <span class="c1"># scaled int16</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">pack</span><span class="p">(</span><span class="s1">&#39;&gt;f&#39;</span><span class="p">,</span> <span class="n">t_offset</span><span class="p">)</span>  <span class="c1"># float</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">Svm40CmdSetTemperatureOffsetForRhtMeasurements</span><span class="p">(</span><span class="n">data</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="Svm40ShdlcDevice.get_voc_tuning_parameters"><a class="viewcode-back" href="../../api.html#sensirion_shdlc_svm40.device.Svm40ShdlcDevice.get_voc_tuning_parameters">[docs]</a>    <span class="k">def</span> <span class="nf">get_voc_tuning_parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gets the currently set parameters for customizing the VOC algorithm.</span>
+
+<span class="sd">        :return:</span>
+<span class="sd">            - voc_index_offset (int) -</span>
+<span class="sd">              VOC index representing typical (average) conditions. The default</span>
+<span class="sd">              value is 100.</span>
+<span class="sd">            - learning_time_hours (int) -</span>
+<span class="sd">              Time constant of long-term estimator in hours. Past events will</span>
+<span class="sd">              be forgotten after about twice the learning time. The default</span>
+<span class="sd">              value is 12 hours.</span>
+<span class="sd">            - gating_max_duration_minutes (int) -</span>
+<span class="sd">              Maximum duration of gating in minutes (freeze of estimator during</span>
+<span class="sd">              high VOC index signal). Zero disables the gating. The default</span>
+<span class="sd">              value is 180 minutes.</span>
+<span class="sd">            - std_initial (int) -</span>
+<span class="sd">              Initial estimate for standard deviation. Lower value boosts</span>
+<span class="sd">              events during initial learning period, but may result in larger</span>
+<span class="sd">              device-to-device variations. The default value is 50.</span>
+<span class="sd">        :rtype: tuple</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">Svm40CmdGetVocTuningParameters</span><span class="p">())</span></div>
+
+<div class="viewcode-block" id="Svm40ShdlcDevice.set_voc_tuning_parameters"><a class="viewcode-back" href="../../api.html#sensirion_shdlc_svm40.device.Svm40ShdlcDevice.set_voc_tuning_parameters">[docs]</a>    <span class="k">def</span> <span class="nf">set_voc_tuning_parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">voc_index_offset</span><span class="p">,</span> <span class="n">learning_time_hours</span><span class="p">,</span>
+                                  <span class="n">gating_max_duration_minutes</span><span class="p">,</span> <span class="n">std_initial</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sets parameters to customize the VOC algorithm. This command is only</span>
+<span class="sd">        available in idle mode.</span>
+
+<span class="sd">        .. note:: Execute the store command after writing the parameter to</span>
+<span class="sd">                  store it in the non-volatile memory of the device otherwise</span>
+<span class="sd">                  the parameter will be reset upton a device reset.</span>
+
+<span class="sd">        :param int voc_index_offset:</span>
+<span class="sd">            VOC index representing typical (average) conditions. The default</span>
+<span class="sd">            value is 100.</span>
+<span class="sd">        :param int learning_time_hours:</span>
+<span class="sd">            Time constant of long-term estimator in hours. Past events will be</span>
+<span class="sd">            forgotten after about twice the learning time. The default value is</span>
+<span class="sd">            12 hours.</span>
+<span class="sd">        :param int gating_max_duration_minutes:</span>
+<span class="sd">            Maximum duration of gating in minutes (freeze of estimator during</span>
+<span class="sd">            high VOC index signal). Set to zero to disable the gating. The</span>
+<span class="sd">            default value is 180 minutes.</span>
+<span class="sd">        :param int std_initial:</span>
+<span class="sd">            Initial estimate for standard deviation. Lower value boosts events</span>
+<span class="sd">            during initial learning period, but may result in larger</span>
+<span class="sd">            device-to-device variations. The default value is 50.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">Svm40CmdSetVocTuningParameters</span><span class="p">(</span>
+            <span class="n">voc_index_offset</span><span class="p">,</span> <span class="n">learning_time_hours</span><span class="p">,</span> <span class="n">gating_max_duration_minutes</span><span class="p">,</span>
+            <span class="n">std_initial</span><span class="p">))</span></div>
 
 <div class="viewcode-block" id="Svm40ShdlcDevice.store_nv_data"><a class="viewcode-back" href="../../api.html#sensirion_shdlc_svm40.device.Svm40ShdlcDevice.store_nv_data">[docs]</a>    <span class="k">def</span> <span class="nf">store_nv_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Stores all customer engine parameters to the non-volatile memory.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">Svm40CmdStoreNvData</span><span class="p">())</span></div>
+
+<div class="viewcode-block" id="Svm40ShdlcDevice.get_voc_state"><a class="viewcode-back" href="../../api.html#sensirion_shdlc_svm40.device.Svm40ShdlcDevice.get_voc_state">[docs]</a>    <span class="k">def</span> <span class="nf">get_voc_state</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gets the current VOC algorithm state. Retrieved values can be used to</span>
+<span class="sd">        set the VOC algorithm state to resume operation after a short</span>
+<span class="sd">        interruption, skipping initial learning phase. This command is only</span>
+<span class="sd">        available during measurement mode.</span>
+
+<span class="sd">        .. note:: This feature can only be used after at least 3 hours of</span>
+<span class="sd">                  continuous operation.</span>
+
+<span class="sd">        :return: Current VOC algorithm state.</span>
+<span class="sd">        :rtype: list(int)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">Svm40CmdGetVocState</span><span class="p">())</span></div>
+
+<div class="viewcode-block" id="Svm40ShdlcDevice.set_voc_state"><a class="viewcode-back" href="../../api.html#sensirion_shdlc_svm40.device.Svm40ShdlcDevice.set_voc_state">[docs]</a>    <span class="k">def</span> <span class="nf">set_voc_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set previously retrieved VOC algorithm state to resume operation after</span>
+<span class="sd">        a short interruption, skipping initial learning phase. This command is</span>
+<span class="sd">        only available in idle mode.</span>
+
+<span class="sd">        .. note:: This feature should not be used after interruptions of more</span>
+<span class="sd">                  than 10 minutes.</span>
+
+<span class="sd">        :param list(int) state: Current VOC algorithm state.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">Svm40CmdSetVocState</span><span class="p">(</span><span class="n">state</span><span class="p">))</span></div>
 
 <div class="viewcode-block" id="Svm40ShdlcDevice.start_measurement"><a class="viewcode-back" href="../../api.html#sensirion_shdlc_svm40.device.Svm40ShdlcDevice.start_measurement">[docs]</a>    <span class="k">def</span> <span class="nf">start_measurement</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
