@@ -1,6 +1,13 @@
 CHANGELOG
 ---------
 
+0.3.0
+:::::
+- Updated the commands to support new features for firmware versions >= 2.0
+- ``set_compensation_temperature_offset()``: Added the option to send the
+  temperature offset parameter using an integer instead of a float which is
+  supported for firmware versions >= 2.0
+
 0.2.1
 :::::
 - First public release
