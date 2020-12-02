@@ -1,0 +1,608 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>sensirion_shdlc_svm40.device &mdash; sensirion-shdlc-svm40 0.3.0 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/banner.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> sensirion-shdlc-svm40
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.3.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../shdlc.html">SHDLC Protocol</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../quickstart.html">Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../firmware_update.html">Firmware Update</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api.html">API Reference</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">sensirion-shdlc-svm40</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>sensirion_shdlc_svm40.device</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for sensirion_shdlc_svm40.device</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="c1"># (c) Copyright 2020 Sensirion AG, Switzerland</span>
+
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">absolute_import</span><span class="p">,</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span>
+<span class="kn">from</span> <span class="nn">sensirion_shdlc_driver</span> <span class="kn">import</span> <span class="n">ShdlcDeviceBase</span><span class="p">,</span> <span class="n">ShdlcFirmwareUpdate</span>
+<span class="kn">from</span> <span class="nn">.device_errors</span> <span class="kn">import</span> <span class="n">SVM40_DEVICE_ERROR_LIST</span>
+<span class="kn">from</span> <span class="nn">.firmware_image</span> <span class="kn">import</span> <span class="n">Svm40FirmwareImage</span>
+<span class="kn">from</span> <span class="nn">.commands</span> <span class="kn">import</span> \
+    <span class="n">Svm40CmdGetProductType</span><span class="p">,</span> \
+    <span class="n">Svm40CmdGetProductName</span><span class="p">,</span> \
+    <span class="n">Svm40CmdGetSerialNumber</span><span class="p">,</span> \
+    <span class="n">Svm40CmdGetVersion</span><span class="p">,</span> \
+    <span class="n">Svm40CmdDeviceReset</span><span class="p">,</span> \
+    <span class="n">Svm40CmdGetSystemUpTime</span><span class="p">,</span> \
+    <span class="n">Svm40CmdStartContinuousMeasurement</span><span class="p">,</span> \
+    <span class="n">Svm40CmdStopMeasurement</span><span class="p">,</span> \
+    <span class="n">Svm40CmdReadMeasuredValuesAsIntegers</span><span class="p">,</span> \
+    <span class="n">Svm40CmdReadMeasuredValuesAsIntegersWithRawParameters</span><span class="p">,</span> \
+    <span class="n">Svm40CmdGetTemperatureOffsetForRhtMeasurements</span><span class="p">,</span> \
+    <span class="n">Svm40CmdGetVocTuningParameters</span><span class="p">,</span> \
+    <span class="n">Svm40CmdStoreNvData</span><span class="p">,</span> \
+    <span class="n">Svm40CmdSetTemperatureOffsetForRhtMeasurements</span><span class="p">,</span> \
+    <span class="n">Svm40CmdSetVocTuningParameters</span><span class="p">,</span> \
+    <span class="n">Svm40CmdGetVocState</span><span class="p">,</span> \
+    <span class="n">Svm40CmdSetVocState</span>
+<span class="kn">from</span> <span class="nn">.response_types</span> <span class="kn">import</span> <span class="n">AirQuality</span><span class="p">,</span> <span class="n">Humidity</span><span class="p">,</span> <span class="n">Temperature</span>
+<span class="kn">from</span> <span class="nn">sensirion_shdlc_driver.types</span> <span class="kn">import</span> <span class="n">FirmwareVersion</span><span class="p">,</span> <span class="n">HardwareVersion</span><span class="p">,</span> \
+    <span class="n">ProtocolVersion</span><span class="p">,</span> <span class="n">Version</span>
+<span class="kn">from</span> <span class="nn">struct</span> <span class="kn">import</span> <span class="n">pack</span><span class="p">,</span> <span class="n">unpack</span>
+
+
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="Svm40ShdlcDevice"><a class="viewcode-back" href="../../api.html#sensirion_shdlc_svm40.device.Svm40ShdlcDevice">[docs]</a><span class="k">class</span> <span class="nc">Svm40ShdlcDevice</span><span class="p">(</span><span class="n">ShdlcDeviceBase</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    SVM40 device.</span>
+
+<span class="sd">    This is a low-level driver which just provides all SHDLC commands as Python</span>
+<span class="sd">    methods. Typically, calling a method sends one SHDLC request to the device</span>
+<span class="sd">    and interprets its response. There is no higher level functionality</span>
+<span class="sd">    available, please look for other drivers if you need a higher level</span>
+<span class="sd">    interface.</span>
+
+<span class="sd">    There is no (or very few) caching functionality in this driver. For example</span>
+<span class="sd">    if you call :func:`get_serial_number` 100 times, it will send the command</span>
+<span class="sd">    100 times over the SHDLC interface to the device. This makes the driver</span>
+<span class="sd">    (nearly) stateless.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="Svm40ShdlcDevice.__init__"><a class="viewcode-back" href="../../api.html#sensirion_shdlc_svm40.device.Svm40ShdlcDevice.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">connection</span><span class="p">,</span> <span class="n">slave_address</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create an SVM40 device instance on an SHDLC connection.</span>
+
+<span class="sd">        .. note:: This constructor does not communicate with the device, so</span>
+<span class="sd">                  it&#39;s possible to instantiate an object even if the device is</span>
+<span class="sd">                  not connected or powered yet.</span>
+
+<span class="sd">        :param ~sensirion_shdlc_driver.connection.ShdlcConnection connection:</span>
+<span class="sd">            The connection used for the communication.</span>
+<span class="sd">        :param byte slave_address:</span>
+<span class="sd">            The address of the device. The default address of the SVM40 is 0.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Svm40ShdlcDevice</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">connection</span><span class="p">,</span> <span class="n">slave_address</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_register_device_errors</span><span class="p">(</span><span class="n">SVM40_DEVICE_ERROR_LIST</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Svm40ShdlcDevice.get_product_type"><a class="viewcode-back" href="../../api.html#sensirion_shdlc_svm40.device.Svm40ShdlcDevice.get_product_type">[docs]</a>    <span class="k">def</span> <span class="nf">get_product_type</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">as_int</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the product type. The product type (sometimes also called &quot;device</span>
+<span class="sd">        type&quot;) can be used to detect what kind of SHDLC product is connected.</span>
+
+<span class="sd">        :param bool as_int: If ``True``, the product type is returned as an</span>
+<span class="sd">                            integer, otherwise as a string of hexadecimal</span>
+<span class="sd">                            digits (default).</span>
+<span class="sd">        :return: The product type as an integer or string of hexadecimal</span>
+<span class="sd">                 digits.</span>
+<span class="sd">        :rtype: string/int</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">product_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">Svm40CmdGetProductType</span><span class="p">())</span>
+        <span class="k">if</span> <span class="n">as_int</span><span class="p">:</span>
+            <span class="n">product_type</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">product_type</span><span class="p">,</span> <span class="mi">16</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">product_type</span></div>
+
+<div class="viewcode-block" id="Svm40ShdlcDevice.get_product_name"><a class="viewcode-back" href="../../api.html#sensirion_shdlc_svm40.device.Svm40ShdlcDevice.get_product_name">[docs]</a>    <span class="k">def</span> <span class="nf">get_product_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the product name of the device.</span>
+
+<span class="sd">        :return: The product name as an ASCII string.</span>
+<span class="sd">        :rtype: string</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">Svm40CmdGetProductName</span><span class="p">())</span></div>
+
+<div class="viewcode-block" id="Svm40ShdlcDevice.get_serial_number"><a class="viewcode-back" href="../../api.html#sensirion_shdlc_svm40.device.Svm40ShdlcDevice.get_serial_number">[docs]</a>    <span class="k">def</span> <span class="nf">get_serial_number</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the serial number of the device.</span>
+
+<span class="sd">        :return: The serial number as an ASCII string.</span>
+<span class="sd">        :rtype: string</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">Svm40CmdGetSerialNumber</span><span class="p">())</span></div>
+
+<div class="viewcode-block" id="Svm40ShdlcDevice.get_version"><a class="viewcode-back" href="../../api.html#sensirion_shdlc_svm40.device.Svm40ShdlcDevice.get_version">[docs]</a>    <span class="k">def</span> <span class="nf">get_version</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the version of the device firmware, hardware and SHDLC protocol.</span>
+
+<span class="sd">        :return: The device version as a Version object.</span>
+<span class="sd">        :rtype: Version</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">firmware_major</span><span class="p">,</span> <span class="n">firmware_minor</span><span class="p">,</span> <span class="n">firmware_debug</span><span class="p">,</span> \
+            <span class="n">hardware_major</span><span class="p">,</span> <span class="n">hardware_minor</span><span class="p">,</span> <span class="n">protocol_major</span><span class="p">,</span> <span class="n">protocol_minor</span> <span class="o">=</span> \
+            <span class="bp">self</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">Svm40CmdGetVersion</span><span class="p">())</span>
+        <span class="k">return</span> <span class="n">Version</span><span class="p">(</span>
+            <span class="n">firmware</span><span class="o">=</span><span class="n">FirmwareVersion</span><span class="p">(</span>
+                <span class="n">major</span><span class="o">=</span><span class="n">firmware_major</span><span class="p">,</span>
+                <span class="n">minor</span><span class="o">=</span><span class="n">firmware_minor</span><span class="p">,</span>
+                <span class="n">debug</span><span class="o">=</span><span class="n">firmware_debug</span>
+            <span class="p">),</span>
+            <span class="n">hardware</span><span class="o">=</span><span class="n">HardwareVersion</span><span class="p">(</span>
+                <span class="n">major</span><span class="o">=</span><span class="n">hardware_major</span><span class="p">,</span>
+                <span class="n">minor</span><span class="o">=</span><span class="n">hardware_minor</span>
+            <span class="p">),</span>
+            <span class="n">protocol</span><span class="o">=</span><span class="n">ProtocolVersion</span><span class="p">(</span>
+                <span class="n">major</span><span class="o">=</span><span class="n">protocol_major</span><span class="p">,</span>
+                <span class="n">minor</span><span class="o">=</span><span class="n">protocol_minor</span>
+            <span class="p">)</span>
+        <span class="p">)</span></div>
+
+<div class="viewcode-block" id="Svm40ShdlcDevice.get_system_up_time"><a class="viewcode-back" href="../../api.html#sensirion_shdlc_svm40.device.Svm40ShdlcDevice.get_system_up_time">[docs]</a>    <span class="k">def</span> <span class="nf">get_system_up_time</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the system up time of the device.</span>
+
+<span class="sd">        :return: The time since the last power-on or device reset [s].</span>
+<span class="sd">        :rtype: int</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">Svm40CmdGetSystemUpTime</span><span class="p">())</span></div>
+
+<div class="viewcode-block" id="Svm40ShdlcDevice.device_reset"><a class="viewcode-back" href="../../api.html#sensirion_shdlc_svm40.device.Svm40ShdlcDevice.device_reset">[docs]</a>    <span class="k">def</span> <span class="nf">device_reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Execute a device reset (reboot firmware, similar to power cycle).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">Svm40CmdDeviceReset</span><span class="p">())</span></div>
+
+<div class="viewcode-block" id="Svm40ShdlcDevice.get_compensation_temperature_offset"><a class="viewcode-back" href="../../api.html#sensirion_shdlc_svm40.device.Svm40ShdlcDevice.get_compensation_temperature_offset">[docs]</a>    <span class="k">def</span> <span class="nf">get_compensation_temperature_offset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gets the temperature offset for RHT measurements.</span>
+
+<span class="sd">        :return: Temperature offset in degrees celsius.</span>
+<span class="sd">        :rtype: float</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">Svm40CmdGetTemperatureOffsetForRhtMeasurements</span><span class="p">())</span>
+        <span class="c1"># Firmware versions prior to 2.0 will return a float value (4 bytes)</span>
+        <span class="c1"># and for firmware version &gt;= 2.0 an int16 value (2 bytes) is returned.</span>
+        <span class="n">t_offset</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="n">t_offset</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">unpack</span><span class="p">(</span><span class="s1">&#39;&gt;h&#39;</span><span class="p">,</span> <span class="n">data</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span> <span class="o">/</span> <span class="mf">200.</span>
+        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="o">==</span> <span class="mi">4</span><span class="p">:</span>
+            <span class="n">t_offset</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">unpack</span><span class="p">(</span><span class="s1">&#39;&gt;f&#39;</span><span class="p">,</span> <span class="n">data</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">t_offset</span></div>
+
+<div class="viewcode-block" id="Svm40ShdlcDevice.set_compensation_temperature_offset"><a class="viewcode-back" href="../../api.html#sensirion_shdlc_svm40.device.Svm40ShdlcDevice.set_compensation_temperature_offset">[docs]</a>    <span class="k">def</span> <span class="nf">set_compensation_temperature_offset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t_offset</span><span class="p">,</span>
+                                            <span class="n">send_as_integer</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sets the temperature offset for RHT measurements.</span>
+
+<span class="sd">        .. note:: Execute the command</span>
+<span class="sd">            :py:meth:`~sensirion_shdlc_svm40.device.store_nv_data` command</span>
+<span class="sd">            after writing the parameter to store it in the non-volatile memory</span>
+<span class="sd">            of the device otherwise the parameter will be reset upton a device</span>
+<span class="sd">            reset.</span>
+
+<span class="sd">        :param float t_offset: Temperature offset in degrees celsius.</span>
+<span class="sd">        :param bool send_as_integer:</span>
+<span class="sd">            Set to `True` to use the integer format. This option was added for</span>
+<span class="sd">            firmware version &gt;= 2.0 which will accepted either a float value</span>
+<span class="sd">            (4 bytes) or an int16 value (2 bytes). Firmware versions prior to</span>
+<span class="sd">            2.0 will only accept the float format. Float temperature values are</span>
+<span class="sd">            in degrees celsius with no scaling. Integer temperature</span>
+<span class="sd">            values are in degrees celsius with a scaling of 200.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">send_as_integer</span><span class="p">:</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">pack</span><span class="p">(</span><span class="s1">&#39;&gt;h&#39;</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">t_offset</span> <span class="o">*</span> <span class="mi">200</span><span class="p">)))</span>  <span class="c1"># scaled int16</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">pack</span><span class="p">(</span><span class="s1">&#39;&gt;f&#39;</span><span class="p">,</span> <span class="n">t_offset</span><span class="p">)</span>  <span class="c1"># float</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">Svm40CmdSetTemperatureOffsetForRhtMeasurements</span><span class="p">(</span><span class="n">data</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="Svm40ShdlcDevice.get_voc_tuning_parameters"><a class="viewcode-back" href="../../api.html#sensirion_shdlc_svm40.device.Svm40ShdlcDevice.get_voc_tuning_parameters">[docs]</a>    <span class="k">def</span> <span class="nf">get_voc_tuning_parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gets the currently set parameters for customizing the VOC algorithm.</span>
+
+<span class="sd">        :return:</span>
+<span class="sd">            - voc_index_offset (int) -</span>
+<span class="sd">              VOC index representing typical (average) conditions. The default</span>
+<span class="sd">              value is 100.</span>
+<span class="sd">            - learning_time_hours (int) -</span>
+<span class="sd">              Time constant of long-term estimator in hours. Past events will</span>
+<span class="sd">              be forgotten after about twice the learning time. The default</span>
+<span class="sd">              value is 12 hours.</span>
+<span class="sd">            - gating_max_duration_minutes (int) -</span>
+<span class="sd">              Maximum duration of gating in minutes (freeze of estimator during</span>
+<span class="sd">              high VOC index signal). Zero disables the gating. The default</span>
+<span class="sd">              value is 180 minutes.</span>
+<span class="sd">            - std_initial (int) -</span>
+<span class="sd">              Initial estimate for standard deviation. Lower value boosts</span>
+<span class="sd">              events during initial learning period, but may result in larger</span>
+<span class="sd">              device-to-device variations. The default value is 50.</span>
+<span class="sd">        :rtype: tuple</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">Svm40CmdGetVocTuningParameters</span><span class="p">())</span></div>
+
+<div class="viewcode-block" id="Svm40ShdlcDevice.set_voc_tuning_parameters"><a class="viewcode-back" href="../../api.html#sensirion_shdlc_svm40.device.Svm40ShdlcDevice.set_voc_tuning_parameters">[docs]</a>    <span class="k">def</span> <span class="nf">set_voc_tuning_parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">voc_index_offset</span><span class="p">,</span> <span class="n">learning_time_hours</span><span class="p">,</span>
+                                  <span class="n">gating_max_duration_minutes</span><span class="p">,</span> <span class="n">std_initial</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sets parameters to customize the VOC algorithm. This command is only</span>
+<span class="sd">        available in idle mode.</span>
+
+<span class="sd">        .. note:: Execute the store command after writing the parameter to</span>
+<span class="sd">                  store it in the non-volatile memory of the device otherwise</span>
+<span class="sd">                  the parameter will be reset upton a device reset.</span>
+
+<span class="sd">        :param int voc_index_offset:</span>
+<span class="sd">            VOC index representing typical (average) conditions. The default</span>
+<span class="sd">            value is 100.</span>
+<span class="sd">        :param int learning_time_hours:</span>
+<span class="sd">            Time constant of long-term estimator in hours. Past events will be</span>
+<span class="sd">            forgotten after about twice the learning time. The default value is</span>
+<span class="sd">            12 hours.</span>
+<span class="sd">        :param int gating_max_duration_minutes:</span>
+<span class="sd">            Maximum duration of gating in minutes (freeze of estimator during</span>
+<span class="sd">            high VOC index signal). Set to zero to disable the gating. The</span>
+<span class="sd">            default value is 180 minutes.</span>
+<span class="sd">        :param int std_initial:</span>
+<span class="sd">            Initial estimate for standard deviation. Lower value boosts events</span>
+<span class="sd">            during initial learning period, but may result in larger</span>
+<span class="sd">            device-to-device variations. The default value is 50.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">Svm40CmdSetVocTuningParameters</span><span class="p">(</span>
+            <span class="n">voc_index_offset</span><span class="p">,</span> <span class="n">learning_time_hours</span><span class="p">,</span> <span class="n">gating_max_duration_minutes</span><span class="p">,</span>
+            <span class="n">std_initial</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="Svm40ShdlcDevice.store_nv_data"><a class="viewcode-back" href="../../api.html#sensirion_shdlc_svm40.device.Svm40ShdlcDevice.store_nv_data">[docs]</a>    <span class="k">def</span> <span class="nf">store_nv_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Stores all customer engine parameters to the non-volatile memory.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">Svm40CmdStoreNvData</span><span class="p">())</span></div>
+
+<div class="viewcode-block" id="Svm40ShdlcDevice.get_voc_state"><a class="viewcode-back" href="../../api.html#sensirion_shdlc_svm40.device.Svm40ShdlcDevice.get_voc_state">[docs]</a>    <span class="k">def</span> <span class="nf">get_voc_state</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gets the current VOC algorithm state. Retrieved values can be used to</span>
+<span class="sd">        set the VOC algorithm state to resume operation after a short</span>
+<span class="sd">        interruption, skipping initial learning phase. This command is only</span>
+<span class="sd">        available during measurement mode.</span>
+
+<span class="sd">        .. note:: This feature can only be used after at least 3 hours of</span>
+<span class="sd">                  continuous operation.</span>
+
+<span class="sd">        :return: Current VOC algorithm state.</span>
+<span class="sd">        :rtype: list(int)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">Svm40CmdGetVocState</span><span class="p">())</span></div>
+
+<div class="viewcode-block" id="Svm40ShdlcDevice.set_voc_state"><a class="viewcode-back" href="../../api.html#sensirion_shdlc_svm40.device.Svm40ShdlcDevice.set_voc_state">[docs]</a>    <span class="k">def</span> <span class="nf">set_voc_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set previously retrieved VOC algorithm state to resume operation after</span>
+<span class="sd">        a short interruption, skipping initial learning phase. This command is</span>
+<span class="sd">        only available in idle mode.</span>
+
+<span class="sd">        .. note:: This feature should not be used after interruptions of more</span>
+<span class="sd">                  than 10 minutes.</span>
+
+<span class="sd">        :param list(int) state: Current VOC algorithm state.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">Svm40CmdSetVocState</span><span class="p">(</span><span class="n">state</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="Svm40ShdlcDevice.start_measurement"><a class="viewcode-back" href="../../api.html#sensirion_shdlc_svm40.device.Svm40ShdlcDevice.start_measurement">[docs]</a>    <span class="k">def</span> <span class="nf">start_measurement</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Starts continuous measurement in polling mode.</span>
+
+<span class="sd">        .. note:: This command is only available in idle mode.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">Svm40CmdStartContinuousMeasurement</span><span class="p">())</span></div>
+
+<div class="viewcode-block" id="Svm40ShdlcDevice.stop_measurement"><a class="viewcode-back" href="../../api.html#sensirion_shdlc_svm40.device.Svm40ShdlcDevice.stop_measurement">[docs]</a>    <span class="k">def</span> <span class="nf">stop_measurement</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Leaves the measurement mode and returns to the idle mode.</span>
+
+<span class="sd">        .. note:: This command is only available in measurement mode.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">Svm40CmdStopMeasurement</span><span class="p">())</span></div>
+
+<div class="viewcode-block" id="Svm40ShdlcDevice.read_measured_values"><a class="viewcode-back" href="../../api.html#sensirion_shdlc_svm40.device.Svm40ShdlcDevice.read_measured_values">[docs]</a>    <span class="k">def</span> <span class="nf">read_measured_values</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns the new measurement results.</span>
+
+<span class="sd">        .. note:: This command is only available in measurement mode. The</span>
+<span class="sd">                  firmware updates the measurement values every second. Polling</span>
+<span class="sd">                  data with a faster sampling rate will return the same values.</span>
+<span class="sd">                  The first measurement is available 1 second after the start</span>
+<span class="sd">                  measurement command is issued. Any readout prior to this will</span>
+<span class="sd">                  return zero initialized values.</span>
+
+<span class="sd">        :return:</span>
+<span class="sd">            The measured air quality, humidity and temperature.</span>
+
+<span class="sd">            - air_quality (:py:class:`~sensirion_shdlc_svm40.response_types.AirQuality`) -</span>
+<span class="sd">              Air quality response object.</span>
+<span class="sd">            - humidity (:py:class:`~sensirion_shdlc_svm40.response_types.Humidity`) -</span>
+<span class="sd">              Humidity response object.</span>
+<span class="sd">            - temperature (:py:class:`~sensirion_shdlc_svm40.response_types.Temperature`) -</span>
+<span class="sd">              Temperature response object.</span>
+<span class="sd">        :rtype:</span>
+<span class="sd">            tuple</span>
+<span class="sd">        &quot;&quot;&quot;</span>  <span class="c1"># noqa: E501</span>
+        <span class="n">voc</span><span class="p">,</span> <span class="n">rh</span><span class="p">,</span> <span class="n">t</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">Svm40CmdReadMeasuredValuesAsIntegers</span><span class="p">())</span>
+        <span class="k">return</span> <span class="n">AirQuality</span><span class="p">(</span><span class="n">voc</span><span class="p">),</span> <span class="n">Humidity</span><span class="p">(</span><span class="n">rh</span><span class="p">),</span> <span class="n">Temperature</span><span class="p">(</span><span class="n">t</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Svm40ShdlcDevice.read_measured_values_raw"><a class="viewcode-back" href="../../api.html#sensirion_shdlc_svm40.device.Svm40ShdlcDevice.read_measured_values_raw">[docs]</a>    <span class="k">def</span> <span class="nf">read_measured_values_raw</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns the new measurement results with raw values added.</span>
+
+<span class="sd">        .. note:: This command is only available in measurement mode. The</span>
+<span class="sd">                  firmware updates the measurement values every second. Polling</span>
+<span class="sd">                  data with a faster sampling rate will return the same values.</span>
+<span class="sd">                  The first measurement is available 1 second after the start</span>
+<span class="sd">                  measurement command is issued. Any readout prior to this will</span>
+<span class="sd">                  return zero initialized values.</span>
+
+<span class="sd">        :return:</span>
+<span class="sd">            The measured air quality, humidity and temperature including the</span>
+<span class="sd">            raw values without engine compensation.</span>
+
+<span class="sd">            - air_quality (:py:class:`~sensirion_shdlc_svm40.response_types.AirQuality`) -</span>
+<span class="sd">              Air quality response object.</span>
+<span class="sd">            - humidity (:py:class:`~sensirion_shdlc_svm40.response_types.Humidity`) -</span>
+<span class="sd">              Humidity response object.</span>
+<span class="sd">            - temperature (:py:class:`~sensirion_shdlc_svm40.response_types.Temperature`) -</span>
+<span class="sd">              Temperature response object.</span>
+<span class="sd">            - raw_voc_ticks (int) -</span>
+<span class="sd">              Raw VOC output ticks as read from the SGP sensor.</span>
+<span class="sd">            - raw_humidity (:py:class:`~sensirion_shdlc_svm40.response_types.Humidity`) -</span>
+<span class="sd">              Humidity response object.</span>
+<span class="sd">            - raw_temperature (:py:class:`~sensirion_shdlc_svm40.response_types.Temperature`) -</span>
+<span class="sd">              Temperature response object.</span>
+<span class="sd">        :rtype:</span>
+<span class="sd">            tuple</span>
+<span class="sd">        &quot;&quot;&quot;</span>  <span class="c1"># noqa: E501</span>
+        <span class="n">voc</span><span class="p">,</span> <span class="n">rh</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">raw_voc</span><span class="p">,</span> <span class="n">raw_rh</span><span class="p">,</span> <span class="n">raw_t</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
+            <span class="n">Svm40CmdReadMeasuredValuesAsIntegersWithRawParameters</span><span class="p">())</span>
+        <span class="k">return</span> <span class="n">AirQuality</span><span class="p">(</span><span class="n">voc</span><span class="p">),</span> <span class="n">Humidity</span><span class="p">(</span><span class="n">rh</span><span class="p">),</span> <span class="n">Temperature</span><span class="p">(</span><span class="n">t</span><span class="p">),</span> \
+            <span class="n">raw_voc</span><span class="p">,</span> <span class="n">Humidity</span><span class="p">(</span><span class="n">raw_rh</span><span class="p">),</span> <span class="n">Temperature</span><span class="p">(</span><span class="n">raw_t</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Svm40ShdlcDevice.update_firmware"><a class="viewcode-back" href="../../api.html#sensirion_shdlc_svm40.device.Svm40ShdlcDevice.update_firmware">[docs]</a>    <span class="k">def</span> <span class="nf">update_firmware</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">image</span><span class="p">,</span> <span class="n">emergency</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">status_callback</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                        <span class="n">progress_callback</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Update the firmware on the device.</span>
+
+<span class="sd">        This method allows you to download a new firmware (provided as a</span>
+<span class="sd">        \\*.hex file) to the device. A device reset is performed after the</span>
+<span class="sd">        firmware update.</span>
+
+<span class="sd">        .. note:: This can take several minutes, don&#39;t abort it! If aborted,</span>
+<span class="sd">                  the device stays in the bootloader and you need to restart</span>
+<span class="sd">                  the update with ``emergency=True`` to recover.</span>
+
+<span class="sd">        :param image:</span>
+<span class="sd">            The image to flash, either as a</span>
+<span class="sd">            :py::class:`~sensirion_shdlc_svm40.firmware_image.Svm40FirmwareImage`</span>
+<span class="sd">            object, a file-like object, or the filename (``str``) to the</span>
+<span class="sd">            \\*.hex file.</span>
+<span class="sd">        :param bool emergency:</span>
+<span class="sd">            Must be set to ``True`` if the device is already in bootloader</span>
+<span class="sd">            mode, ``False`` otherwise.</span>
+<span class="sd">        :param callable status_callback:</span>
+<span class="sd">            Optional callback for status report, taking a string as parameter.</span>
+<span class="sd">        :param callable progress_callback:</span>
+<span class="sd">            Optional callback for progress report, taking a float as parameter</span>
+<span class="sd">            (progress in percent).</span>
+<span class="sd">        :raises ~sensirion_shdlc_driver.errors.ShdlcFirmwareImageIncompatibilityError:</span>
+<span class="sd">            If the image is not compatible with the connected device.</span>
+<span class="sd">        :raises Exception:</span>
+<span class="sd">            On other errors.</span>
+<span class="sd">        &quot;&quot;&quot;</span>  <span class="c1"># noqa: E501</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">Svm40FirmwareImage</span><span class="p">):</span>
+            <span class="n">image</span> <span class="o">=</span> <span class="n">Svm40FirmwareImage</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>
+        <span class="n">update</span> <span class="o">=</span> <span class="n">ShdlcFirmwareUpdate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">image</span><span class="p">,</span>
+                                     <span class="n">status_callback</span><span class="o">=</span><span class="n">status_callback</span><span class="p">,</span>
+                                     <span class="n">progress_callback</span><span class="o">=</span><span class="n">progress_callback</span><span class="p">)</span>
+        <span class="n">update</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">emergency</span><span class="o">=</span><span class="n">emergency</span><span class="p">)</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020 Sensirion AG, Switzerland
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+<div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+        <span class="fa fa-book"> Other Versions</span>
+        v: 0.3.0
+        <span class="fa fa-caret-down"></span>
+    </span>
+    <div class="rst-other-versions">
+        <dl>
+            <dt>Tags</dt>
+            <dd><a href="../../../0.1.0/index.html">0.1.0</a></dd>
+            <dd><a href="../../../0.2.0/index.html">0.2.0</a></dd>
+            <dd><a href="../../../0.2.1/index.html">0.2.1</a></dd>
+            <dd><a href="device.html">0.3.0</a></dd>
+        </dl>
+        <dl>
+            <dt>Branches</dt>
+            <dd><a href="../../../master/index.html">master</a></dd>
+        </dl>
+    </div>
+</div>
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
